@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}پرداخت موفق{% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-12">
+
+            <div class="card shadow-lg text-center p-4" style="border-radius: 15px;">
+                
+                <img src="{% static 'images/success.png' %}" 
+                     alt="Success" 
+                     style="width:120px;" 
+                     class="mx-auto mb-3">
+
+                <h2 class="text-success mb-3">پرداخت با موفقیت انجام شد</h2>
+                
+                <p class="lead mb-4">
+                    سفارش شما با موفقیت ثبت شد.
+                </p>
+
+                <div class="alert alert-success text-start">
+                    <p>کد پیگیری پرداخت: <strong>{{ order.ref_id }}</strong></p>
+                    <p><strong>شماره سفارش:</strong> {{ order.id }}</p>
+                    <p><strong>مبلغ پرداخت شده:</strong> {{ order.total_price }} تومان</p>
+                </div>
+
+                <a href="{% url 'main:home' %}" class="btn btn-success px-4 mt-3">
+                    بازگشت به صفحه اصلی
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

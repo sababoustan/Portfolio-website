@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_filters %}
+{% block title %}آدرس{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-130">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="breadcrumb-title">اطلاعات شما</h1>
+
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-list__item"><a href="{%url 'main:home'%}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-list__item breadcrumb-list__item--active">اطلاعات شما</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-12">
+
+            <!-- ============================= -->
+            <!--       saved address      -->
+            <!-- ============================= -->
+
+            {% if address_old %}
+                <h5 class="mb-3 text-center">آدرس‌های ذخیره‌شده</h5>
+
+                <form method="POST" action="{% url 'accounts:confirm_order' %}">
+                    {% csrf_token %}
+
+                    {% for adr in address_old %}
+                    <label class="address-card">
+                        <input type="radio"
+                               name="selected_address"
+                               value="{{ adr.id }}"
+                               class="address-radio"
+                               {% if adr.id|stringformat:"s" == selected_id %}checked{% endif %}>
+
+                        <div class="address-box">
+                            <p><strong>نام گیرنده:</strong> {{ adr.full_name }}</p>
+                            <p><strong>شهر:</strong> {{ adr.city }}</p>
+                            <p><strong>آدرس:</strong> {{ adr.street_address }}</p>
+                            <p><strong>کدپستی:</strong> {{ adr.postal_code }}</p>
+                            <p><strong>تلفن:</strong> {{ adr.phone_number }}</p>
+                        </div>
+                    </label>
+                    {% endfor %}
+
+                    <div class="text-center mt-3">
+                        <button
+                            type="submit"
+                            id="continue-btn"
+                            class="btn btn-black w-100 mt-3"
+                            disabled
+                        >
+                            ادامه خرید
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <hr class="my-4">
+            {% endif %}
+
+
+            <!-- ============================= -->
+            <!--       add new address    -->
+            <!-- ============================= -->
+
+            <h5 class="mb-3 text-center">افزودن آدرس جدید</h5>
+
+            <form method="POST" action="{% url 'accounts:checkout' %}" id="new-address-form">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">نام گیرنده</label>
+                    {{ form.full_name|add_class:'form-control' }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">شهر</label>
+                    {{ form.city|add_class:'form-control' }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">آدرس</label>
+                    {{ form.street_address|add_class:'form-control' }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">کدپستی</label>
+                    {{ form.postal_code|add_class:'form-control' }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">شماره تماس</label>
+                    {{ form.phone_number|add_class:'form-control' }}
+                </div>
+
+                {% if items %}
+                <div class="cart-summary-box p-3 shadow-sm mb-4 rounded">
+                    <h5 class="mb-3 text-center">خلاصه سبد خرید</h5>
+
+                    <div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center;">
+                        {% for item in items %}
+                        <div style="width:150px; border:1px solid #ddd; padding:10px; border-radius:8px; text-align:center;">
+                            <img src="{{ item.product.image.url }}" 
+                                 style="width:100%; height:100px; object-fit:cover; border-radius:6px;">
+
+                            <p class="mt-2"><strong>{{ item.product.title }}</strong></p>
+                            <p>تعداد: {{ item.quantity }}</p>
+                            <p><strong>{{ item.total_price }} تومان</strong></p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+                    <p class="text-center"><strong>جمع سبدخرید:</strong> {{ final_price }} تومان</p>
+
+                </div>
+                {% endif %}
+
+                <button type="submit"
+                class="btn checkout-btn w-100 mt-2">
+                    ذخیره آدرس جدید
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ============================= -->
+<!--           javascript          -->
+<!-- ============================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const radios = document.querySelectorAll("input[name='selected_address']");
+    const payButton = document.getElementById("pay_button");
+    payButton.disabled = true;
+    radios.forEach(radio => {
+        radio.addEventListener("change", () => {
+            payButton.disabled = false;
+        });
+    });
+
+});
+</script>
+
+{% endblock %}

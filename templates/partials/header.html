@@ -1,0 +1,369 @@
+  {% load static %}
+  <header class="header header-wide-topbar header-sticky">
+
+    <!--=======  header top  =======-->
+
+    <div class="header-top pt-10 pb-10">
+      <div class="container wide">
+        <!--=======  header top container  =======-->
+
+        <div class="header-top-container">
+          <!--=======  header top left  =======-->
+
+          <div class="header-top-left">
+
+            <!--=======  order online text  =======-->
+
+            <div class="order-online-text">
+              سفارش آنلاین با ما تماس بگیرید <a href="#"><span class="number">09307190078</span></a>
+            </div>
+
+            <!--=======  End of order online text  =======-->
+
+          </div>
+
+          <!--=======  End of header top left  =======-->
+
+          <!--=======  header top right  =======-->
+
+          <div class="header-top-right">
+            <!--=======  top shop sropdown =======-->
+
+            <!--=======  top social icons  =======-->
+
+            <div class="top-social-icons">
+              <ul>
+                <li><a href="//www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+              </ul>
+            </div>
+
+            <!--=======  End of top social icons  =======-->
+          </div>
+
+          <!--=======  End of header top right  =======-->
+        </div>
+
+        <!--=======  End of header top container  =======-->
+      </div>
+    </div>
+
+    <!--=======  End of header top  =======-->
+
+    <!--=======  header bottom  =======-->
+
+    <div class="header-bottom pt-md-40 pb-md-40 pt-sm-40 pb-sm-40">
+      <div class="container wide">
+
+
+        <!--=======  header bottom container  =======-->
+
+        <div class="header-bottom-container">
+
+          <!--=======  logo with off canvas  =======-->
+
+          <div class="logo-with-offcanvas d-flex">
+
+
+
+            <!--=======  logo   =======-->
+
+            <div class="logo">
+              <a href="index.html">
+                <img src="{% static 'assets/images/logo.png' %}" class="img-fluid" alt="">
+              </a>
+            </div>
+
+            <!--=======  End of logo   =======-->
+          </div>
+
+          <!--=======  End of logo with off canvas  =======-->
+
+          <!--=======  header bottom navigation  =======-->
+
+          <div class="header-bottom-navigation">
+            <div class="site-main-nav d-none d-lg-block">
+              <nav class="site-nav center-menu">
+                <ul>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <!--=======  End of header bottom navigation  =======-->
+
+          <!--=======  headeer right container  =======-->
+
+          <div class="header-right-container">
+
+            <!--=======  header right icons  =======-->
+
+            <div class="header-right-icons d-flex justify-content-end align-items-center h-100">
+              <!--=======  single-icon  =======-->
+              <div class="single-icon search">
+                <a href="javascript:void(0)" id="search-icon">
+                  <i class="ion-ios-search-strong"></i>
+                </a>
+                <form id="search-form" action="{% url 'products:product_search' %}" method="get" style="display:none;"
+                    class="search-box">
+                  <input type="text" name="search" id="search-input" placeholder="جستجو کنید ..." autocomplete="off">
+                  <button type="submit" class="btn btn-success">جستجو</button>
+              </form>
+
+              </div>
+
+              <!--=======  End of single-icon  =======-->
+              <!--=======  single-icon  =======-->
+
+             <div class="single-icon user-login">
+                {% if user.is_authenticated %}
+                    <span class="user-name">{{ user.username }}</span>
+                    <a href="{% url 'accounts:logout' %}">
+                        <i class="ion-android-person"></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">
+                        <i class="ion-android-person"></i>
+                    </a>
+                {% endif %}
+            </div>
+
+
+              <!--=======  End of single-icon  =======-->
+
+              <div class="single-icon user-logout">
+                  <a href="{% url 'accounts:logout' %}">
+                      <i class="ion-log-out"></i>
+                  </a>
+              </div>
+
+
+              <!--=======  single-icon  =======-->
+
+              <div class="single-icon wishlist">
+                <a href="{% url 'cart:wishlist' %}" >
+                    <i class="ion-heart"></i>
+                    <span id="wishlist-count" class="count wishlist-count">{{ wishlist_count }}</span>
+                </a>
+              </div>
+
+              <!--=======  End of single-icon  =======-->
+              <!--=======  single-icon  =======-->
+
+              <div class="single-icon cart">
+                <a href="{% url 'cart:cart_view' %}" >
+                    <i class="ion-ios-cart"></i>
+                    <span id="cart-count" class="count">{{ cart_count|default:0 }}</span>
+                </a>
+
+              </div>
+
+              <!--=======  End of single-icon  =======-->
+
+            </div>
+            <!--=======  End of header right icons  =======-->
+
+          </div>
+
+          <!--=======  End of headeer right container  =======-->
+
+
+        </div>
+
+        <!--=======  End of header bottom container  =======-->
+
+        <!-- Mobile Navigation Start Here -->
+
+        <div class="site-mobile-navigation d-block d-lg-none">
+          <div id="dl-menu" class="dl-menuwrapper site-mobile-nav">
+            <!--Site Mobile Menu Toggle Start-->
+            <button class="dl-trigger hamburger hamburger--spin">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </button>
+            <!--Site Mobile Menu Toggle End-->
+            <ul class="dl-menu dl-menu-toggle">
+              <li class=""><a href="#">صفحه اصلی</a>
+                <ul class="dl-submenu">
+                  <li class=""> <a href="#">خانه گروه یک</a>
+                    <ul class="dl-submenu">
+                      <li><a href="index-trending.html">پرطرفدار</a></li>
+                      <li><a href="index-collection.html">مجموعه من</a></li>
+                      <li><a href="index-special.html">ویژه</a></li>
+                      <li><a href="index-concept.html">مفهوم</a></li>
+                      <li><a href="index-smart.html">طراحی هوشمند</a></li>
+                    </ul>
+                  </li>
+                  <li> <a href="#">خانه گروه دو</a>
+                    <ul class="dl-submenu">
+                      <li><a href="index-furniture.html">مبلمان </a></li>
+                      <li><a href="index-essentials.html">ملزومات</a></li>
+                      <li><a href="index-lookbook.html">کتاب نگاه</a></li>
+                      <li><a href="index-wearables.html">پوشیدنی ها</a></li>
+                      <li><a href="index-accessories.html">تجهیزات جانبی</a></li>
+                    </ul>
+                  </li>
+                  <li> <a href="#">خانه گروه سه</a>
+                    <ul class="dl-submenu">
+                      <li><a href="index-shoppable.html">قابل خرید</a></li>
+
+                      <li><a href="index-fashion.html">مد</a></li>
+                      <li><a href="index-perfumes.html">عطر</a></li>
+                      <li><a href="index-cosmetics.html">آرایشی</a></li>
+                    </ul>
+                  </li>
+                  <li> <a href="#">گروه خانه چهار</a>
+                    <ul class="dl-submenu">
+                      <li><a href="index-decor.html">دکور خانه</a></li>
+                      <li><a href="index-creative.html">خلاق</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+
+              <li><a href="#">خرید کنید</a>
+                <ul class="dl-submenu">
+                  <li class=""> <a href="#">صفحات فروشگاه</a>
+                    <ul class="dl-submenu">
+                      <li><a href="shop-no-sidebar.html">فروشگاه بدون نوار کناری</a></li>
+                      <li><a href="shop-left-sidebar.html">فروشگاه با نوار کناری سمت چپ</a></li>
+                      <li><a href="shop-right-sidebar.html">فروشگاه با نوار کناری سمت راست</a></li>
+                      <li><a href="shop-fullwidth-no-space.html">فروشگاه با پهنای کامل بدون فضا</a></li>
+                      <li><a href="shop-fullwidth-no-sidebar.html">فروشگاه با پهنای کامل بدون نوار کناری</a></li>
+                      <li><a href="shop-fullwidth-left-sidebar.html">فروشگاه با نوار کناری سمت چپ</a></li>
+                      <li><a href="shop-fullwidth-right-sidebar.html">فروشگاه با نوار کناری تمام پهنای راست</a></li>
+                    </ul>
+                  </li>
+                  <li class=""> <a href="#">صفحات جزئیات محصول</a>
+                    <ul class="dl-submenu">
+                      <li><a href="shop-product-basic.html">پایه </a></li>
+                      <li><a href="shop-product-fullwidth.html">عرض کامل</a></li>
+                      <li><a href="shop-product-sticky-details.html">جزئیات چسبنده</a></li>
+                      <li><a href="shop-product-with-sidebar.html">با نوار کناری</a></li>
+                      <li><a href="shop-product-extra-content.html">محتوای اضافی</a></li>
+                      <li><a href="shop-product-variation-image.html">تصویر تنوع</a></li>
+                      <li><a href="shop-product-bought-together.html">خرید با هم</a></li>
+
+
+                    </ul>
+                  </li>
+                  <li class=""> <a href="#">سایر صفحات فروشگاه</a>
+                    <ul class="dl-submenu">
+                      <li><a href="shop-product-with-background.html">محصول با پس زمینه</a></li>
+                      <li><a href="shop-cart.html">سبد خرید</a></li>
+                      <li><a href="shop-checkout.html">خروجی</a></li>
+                      <li><a href="shop-order-tracking.html">ردیابی سفارش</a></li>
+                      <li><a href="shop-wishlist.html">لیست آرزوها</a></li>
+                      <li><a href="shop-customer-login.html">ورود مشتری</a></li>
+                      <li><a href="shop-by-brand.html">خرید بر اساس برند</a></li>
+
+                    </ul>
+                  </li>
+
+
+                </ul>
+              </li>
+              <li><a href="#">عناصر</a>
+                <ul class="dl-submenu">
+                  <li class=""> <a href="#">فروشگاه / محصولات</a>
+                    <ul class="dl-submenu">
+                      <li><a href="element-product-categories.html">دسته‌های محصول</a></li>
+                      <li><a href="element-product-sliders.html">لغزنده محصول</a></li>
+                      <li><a href="element-product-tabs.html">برگه‌های محصول</a></li>
+                      <li><a href="element-product-widget.html">ویجت محصول</a></li>
+                      <li><a href="element-recent-products.html">محصولات اخیر</a></li>
+                    </ul>
+                  </li>
+                  <li class=""> <a href="#">فروشگاه / محصولات</a>
+                    <ul class="dl-submenu">
+                      <li><a href="element-sale-products.html">محصولات فروش </a></li>
+                      <li><a href="element-featured-products.html">محصولات ویژه</a></li>
+                      <li><a href="element-top-rated-products.html">محصولات دارای رتبه برتر</a></li>
+                      <li><a href="element-bestselling-products.html">پرفروش‌ترین محصولات</a></li>
+                      <li><a href="element-product-attributes.html">ویژگی های محصول</a></li>
+                    </ul>
+                  </li>
+                  <li class=""> <a href="#">موضوع بندی</a>
+                    <ul class="dl-submenu">
+                      <li><a href="element-blog-posts.html">پست های وبلاگ</a></li>
+                      <li><a href="element-mailchimp-form.html">فرم میل چیمپ</a></li>
+                      <li><a href="element-icon-box.html">جعبه نماد</a></li>
+                      <li><a href="element-team-member.html">عضو تیم</a></li>
+                      <li><a href="element-instagram.html">اینستاگرام</a></li>
+
+                    </ul>
+                  </li>
+
+
+                </ul>
+              </li>
+              <li><a href="#">صفحات</a>
+                <ul class="dl-submenu">
+                  <li><a href="about-us.html">درباره ما</a></li>
+                  <li><a href="about-us-2.html">درباره ما 2</a></li>
+                  <li><a href="contact-us.html">با ما تماس بگیرید</a></li>
+                  <li><a href="faq.html">سوالات متداول</a></li>
+                  <li><a href="coming-soon.html">به زودی</a></li>
+                  <li><a href="404.html">404</a></li>
+                  <li><a href="my-account.html">حساب من</a></li>
+                  <li><a href="compare.html">مقایسه</a></li>
+                </ul>
+              </li>
+              <li><a href="#">وبلاگ</a>
+                <ul class="dl-submenu">
+                  <li><a href="#">چیدمان استاندارد</a>
+                    <ul class="dl-submenu">
+                      <li><a href="blog-standard-right-sidebar.html">نوار کناری سمت راست</a></li>
+                      <li><a href="blog-standard-left-sidebar.html">نوار کناری چپ</a></li>
+                      <li><a href="blog-standard-full-width.html">عرض کامل</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">طرح شبکه</a>
+                    <ul class="dl-submenu">
+                      <li><a href="blog-grid-right-sidebar.html">نوار کناری سمت راست</a></li>
+                      <li><a href="blog-grid-left-sidebar.html">نوار کناری چپ</a></li>
+                      <li><a href="blog-grid-full-width.html">عرض کامل</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">چیدمان فهرست</a>
+                    <ul class="dl-submenu">
+                      <li><a href="blog-list-right-sidebar.html">نوار کناری سمت راست</a></li>
+                      <li><a href="blog-list-left-sidebar.html">نوار کناری سمت چپ</a></li>
+                      <li><a href="blog-list-full-width.html">تمام عرض</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">آرایش بنایی</a>
+                    <ul class="dl-submenu">
+                      <li><a href="blog-masonry-right-sidebar.html">نوار کناری سمت راست</a></li>
+                      <li><a href="blog-masonry-left-sidebar.html">نوار کناری چپ</a></li>
+                      <li><a href="blog-masonry-full-width.html">عرض کامل</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">اولین کامل و سپس شبکه</a>
+                    <ul class="dl-submenu">
+                      <li><a href="blog-full-then-grid-right-sidebar.html">نوار کناری سمت راست</a></li>
+                      <li><a href="blog-full-then-grid-left-sidebar.html">نوار کناری چپ</a></li>
+                      <li><a href="blog-full-then-grid-full-width.html">عرض کامل</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">طرح بندی پست تک</a>
+                    <ul class="dl-submenu">
+                      <li><a href="blog-single-post-right-sidebar.html">نوار کناری سمت راست</a></li>
+                      <li><a href="blog-single-post-left-sidebar.html">نوار کناری چپ</a></li>
+                      <li><a href="blog-single-post-full-width.html">عرض کامل</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation End Here -->
+
+
+      </div>
+    </div>
+
+    <!--=======  End of header bottom  =======-->
+  </header>

@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block content %}
+
+  <!--=============================================
+    =            slider area         =
+    =============================================-->
+
+  <div class="slider-area mb-70 mb-md-50 mb-sm-30">
+    <!--=======  slider-wrapper  =======-->
+
+    <div class="lezada-slick-slider lezada-slick-slider--fullscreen" dir="ltr" data-slick-setting='{
+            "slidesToShow": 1,
+            "slidesToScroll": 1,
+            "arrows": true,
+            "dots": true,
+            "autoplay": false,
+            "autoplaySpeed": 5000,
+            "speed": 1000,
+            "prevArrow": {"buttonClass": "slick-prev", "iconClass": "ti-angle-right" },
+            "nextArrow": {"buttonClass": "slick-next", "iconClass": "ti-angle-left" }
+        }'>
+      <!--=======  single slider  =======-->
+      <div class="lezada-single-slider bg-img" data-bg="{%static 'assets/images/electronics-two/slider-1.jpg' %}" dir="ltr">
+        <div class="container h-100" dir="ltr">
+          <div
+            class="row text-center text-lg-start justify-content-center justify-content-lg-start align-items-center h-100" dir="ltr">
+            <div class="lezada-single-slider__content" dir="ltr">
+              <h5 class="subtitle subtitle--black">#مجموعه</h5>
+              <h2 class="main-title main-title--black">تخفیف بزرگ <br>50% تخفیف</h2>
+              <a href="shop-left-sidebar.html" class="lezada-button lezada-button--dark lezada-button--medium">خرید
+                اکنون</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--=======  End of single slider  =======-->
+
+      <!--=======  single slider  =======-->
+      <div class="lezada-single-slider bg-img" data-bg="{%static 'assets/images/electronics-two/slider-2.png' %}" dir="ltr">
+        <div class="container h-100" dir="ltr">
+          <div class="row text-center justify-content-center justify-content-lg-center align-items-center h-100" dir="ltr">
+            <div class="lezada-single-slider__content" dir="ltr">
+              <h5 class="subtitle subtitle--black">#تجهیزات جانبی</h5>
+              <h2 class="main-title main-title--black">تخفیف بزرگ <br>50% تخفیف</h2>
+              <a href="shop-left-sidebar.html" class="lezada-button lezada-button--dark lezada-button--medium">خرید
+                اکنون</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--=======  End of single slider  =======-->
+
+      <!--=======  single slider  =======-->
+      <div class="lezada-single-slider bg-img" data-bg="{%static 'assets/images/electronics-two/slider-3.jpg' %}" dir="ltr">
+        <div class="container h-100" dir="ltr">
+          <div
+            class="row text-center text-lg-start justify-content-center justify-content-lg-end align-items-center h-100" dir="ltr">
+            <div class="lezada-single-slider__content" dir="ltr">
+              <h5 class="subtitle subtitle--black">#تجهیزات جانبی</h5>
+              <h2 class="main-title main-title--black">تخفیف بزرگ <br>50% تخفیف</h2>
+              <a href="shop-left-sidebar.html" class="lezada-button lezada-button--dark lezada-button--medium">خرید
+                اکنون</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--=======  End of single slider  =======-->
+
+    </div>
+
+    <!--=======  End of slider-wrapper  =======-->
+  </div>
+
+  <!--=============================================
+	=            hover banner area         =
+	=============================================-->
+
+  <div class="hover-banner-area mb-70 mb-md-50 mb-sm-30">
+    <div class="container wide">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-30">
+          <!--=======  single banner  =======-->
+
+          <div class="single-banner single-banner--hoverborder">
+            <a class="banner-link" href="shop-left-sidebar.html"></a>
+            <img src="{% static 'assets/images/electronics-two/banner-1.png' %}" class="img-fluid" alt="">
+
+          </div>
+
+          <!--=======  End of single banner  =======-->
+        </div>
+        <div class="col-lg-4 col-md-6 mb-30">
+          <!--=======  single banner  =======-->
+
+          <div class="single-banner single-banner--hoverborder">
+            <a class="banner-link" href="shop-left-sidebar.html"></a>
+            <img src="{% static 'assets/images/electronics-two/banner-2.png' %}" class="img-fluid" alt="">
+
+          </div>
+
+          <!--=======  End of single banner  =======-->
+        </div>
+        <div class="col-lg-4 col-md-6 mb-30">
+          <!--=======  single banner  =======-->
+
+          <div class="single-banner single-banner--hoverborder">
+            <a class="banner-link" href="shop-left-sidebar.html"></a>
+            <img src="{% static 'assets/images/electronics-two/banner3.jpg' %}" class="img-fluid" alt="">
+
+          </div>
+
+          <!--=======  End of single banner  =======-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--=====  End of hover banner area  ======-->
+
+  <!--=============================================
+    =            tab product list area         =
+    =============================================-->
+
+  <div class="tab-product-list-area mb-45 mb-md-25 mb-sm-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <!--=======  tab product navigation  =======-->
+
+          <div class="tab-product-navigation mb-50">
+            <div class="nav nav-tabs justify-content-center" id="nav-tab2" role="tablist">
+              <a class="nav-item nav-link active" id="product-tab-1" data-bs-toggle="tab" href="#product-series-1"
+                role="tab" aria-selected="true">جدید</a>
+              <a class="nav-item nav-link" id="product-tab-2" data-bs-toggle="tab" href="#product-series-2" role="tab"
+                aria-selected="false">محبوب</a>
+              <a class="nav-item nav-link" id="product-tab-3" data-bs-toggle="tab" href="#product-series-3" role="tab"
+                aria-selected="false">فروش</a>
+            </div>
+          </div>
+
+          <!--=======  End of tab product navigation  =======-->
+
+          <!--=======  tab product content  =======-->
+
+          <div class="tab-content" id="nav-tabContent2">
+            <div class="tab-pane fade show active" id="product-series-1" role="tabpanel"
+              aria-labelledby="product-tab-1">
+              <div class="row">
+                {% for product in products%}
+                <!--=======  single product  =======-->
+                <div class="col-12 col-lg-3 col-md-6 col-sm-6 mb-45">
+                  <div class="single-product">
+                    <!--=======  single product image  =======-->
+                          <div class="single-product__image">
+                            <a class="image-wrap" href="{% url 'products:detail' product.slug %}">
+                              <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.title }}">
+                            </a>
+                          
+                          <div class="single-product__floating-icons">
+
+                              <span class="wishlist">
+                                <div class="single-icon wishlist">
+                                  <a href="#" class="add-to-wishlist" data-product="{{ product.id }}">
+                                      <i class="ion-heart {% if product.id in wishlist_ids %}active{% endif %}"></i>
+                                  </a>
+
+                                </div>
+                            </span>
+                              </div>
+                          </div>
+
+                          <div class="single-product__content">
+                            <h4 class="product-title">
+                                <a href="{% url 'products:detail' product.slug %}">{{ product.title }}</a>
+                            </h4>
+                            {% if product.discount_price %}
+                                <p style="text-decoration: line-through; color:#888;">
+                                    {{ product.price }} تومان
+                                </p>
+                                <p style="color: red; font-weight: bold;">
+                                    {{ product.discount_price }} تومان
+                                </p>
+                            {% else %}
+                                <p>{{ product.price }} تومان</p>
+                            {% endif %}
+                          </div>
+                        </div>
+                  </div>
+                  {% endfor %}
+                   </div>  
+
+          </div> 
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!--=============================================
+	=            footer top         =
+	=============================================-->
+
+  <div class="footer-top mb-50 mt-50">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <!--=======  footer top container  =======-->
+
+          <div class="footer-top-container">
+            <!--=======  single footer top widget  =======-->
+
+            <div class="footer-top-single-widget">
+              <h4 class="footer-top-widget-title">ارسال رایگان</h4>
+              <div class="content">
+                <p>در تمام سفارشات بیش از 1/000/000 تومان</p>
+              </div>
+            </div>
+            <div class="footer-top-single-widget">
+              <h4 class="footer-top-widget-title">بازگشت رایگان</h4>
+              <div class="content">
+                <p>30 روز ضمانت بازگشت وجه</p>
+              </div>
+            </div>
+            <div class="footer-top-single-widget">
+              <h4 class="footer-top-widget-title">پرداخت امن</h4>
+              <div class="content">
+                <p>ایمن ترین پرداخت برای مشتری.</p>
+              </div>
+            </div>
+
+            <!--=======  End of single footer top widget  =======-->
+          </div>
+
+          <!--=======  End of footer top container  =======-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--=====  End of footer top  ======-->
+
+  <!--=============================================
+	=            call to action area         =
+	=============================================-->
+
+  <div class="cta-area orange-bg pt-50 pb-50">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="cta-content">
+            <div class="cta-title">
+              <h2>هیچ سوال بی پاسخی دارید؟</h2>
+            </div>
+
+            <div class="cta-button">
+              <button class="lezada-button lezada-button--medium">با ما تماس بگیرید</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--=====  End of call to action area  ======-->
+
+
+ {% endblock %}
+
+

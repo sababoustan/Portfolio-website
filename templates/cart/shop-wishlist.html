@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}لیست علاقه مندی ها{% endblock %}
+
+{% block content %}
+
+	<!--===== End of Header offcanvas about ======-->
+
+	<!--=======  breadcrumb area =======-->
+
+	<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-130">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="breadcrumb-title">لیست علاقه مندیها</h1>
+
+					<!--=======  breadcrumb list  =======-->
+
+					<ul class="breadcrumb-list">
+						<li class="breadcrumb-list__item"><a href="{%url 'main:home'%}">صفحه اصلی</a></li>
+						<li class="breadcrumb-list__item breadcrumb-list__item--active">لیست علاقه مندیها</li>
+					</ul>
+
+					<!--=======  End of breadcrumb list  =======-->
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=======  End of breadcrumb area =======-->
+
+	<!--=============================================
+	=            wishlist page content         =
+	=============================================-->
+
+	<div class="shopping-cart-area mb-130">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<!--=======  cart table  =======-->
+
+					<div class="cart-table-container">
+						<table class="cart-table">
+							<thead>
+								<tr>
+									<th class="product-name" colspan="2">محصول</th>
+									<th class="product-price">قیمت</th>
+									<th class="product-quantity">تعداد</th>
+									<th class="product-subtotal">&nbsp;</th>
+									<th class="product-remove">&nbsp;</th>
+								</tr>
+							</thead>
+
+									<tbody>
+
+									{% for item in items %}
+									<tr>
+										<td class="product-thumbnail">
+											<a href="{% url 'products:detail' item.product.slug %}">
+												<img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="img-fluid">
+											</a>
+										</td>
+
+										<td class="product-name">
+											<a href="{% url 'products:detail' item.product.slug %}">
+												{{ item.product.title }}
+											</a>
+										</td>
+
+										<td class="product-price">
+											<span class="price">{{ item.product.price }} تومان</span>
+										</td>
+
+										<td class="product-quantity">
+											1
+										</td>
+
+										<td class="product-remove">
+											<a href="javascript:void(0)"
+												class="remove-wishlist"
+												data-id="{{ item.product.id }}"
+												title="حذف از علاقه‌مندی‌ها">
+												<i class="fa fa-times"></i>
+											</a>
+
+										</td>
+
+									</tr>
+									{% empty %}
+									<tr>
+										<td colspan="5" class="text-center">
+											هنوز هیچ محصولی در لیست علاقه‌مندی‌ها نیست.
+										</td>
+									</tr>
+									{% endfor %}
+
+									</tbody>
+
+						</table>
+					</div>
+
+					<!--=======  End of cart table  =======-->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=====  End of wishlist page content  ======-->
+
+
+ {% endblock %}

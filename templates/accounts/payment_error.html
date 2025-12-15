@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}خطا در پرداخت{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-100">
+    <div class="container text-center">
+        <h1 class="breadcrumb-title">خطا در پرداخت</h1>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-12">
+
+            <div class="alert alert-danger text-center p-4" style="border-radius: 12px;">
+                <div style="text-align:center; margin-bottom:15px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#dc3545" viewBox="0 0 16 16">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.964 0L.165 13.233c-.457.778.091 1.767.982 1.767h13.706c.89 0 1.438-.99.982-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1-2 .001 1 1 0 0 1 2-.001z"/>
+                    </svg>
+                </div>
+                <h4 class="mb-3">پرداخت انجام نشد!</h4>
+                
+                {% if message %}
+                <p class="mb-3">
+                    <strong>کد خطا:</strong> {{ message }}
+                </p>
+                {% endif %}
+
+                <p class="text-muted">در هنگام اتصال به درگاه پرداخت مشکلی رخ داد.</p>
+                <p class="text-muted">لطفاً دوباره تلاش کنید.</p>
+
+                <a href="{% url 'cart:cart_view' %}"
+                   class="btn btn-dark mt-3 px-4">
+                    بازگشت به سبد خرید
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}سبدخرید{% endblock %}
+
+{% block content %}
+
+	<!--=======  breadcrumb area =======-->
+
+	<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-130">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="breadcrumb-title">سبد خرید</h1>
+
+					<!--=======  breadcrumb list  =======-->
+
+					<ul class="breadcrumb-list">
+						<li class="breadcrumb-list__item"><a href="{%url 'main:home'%}">صفحه اصلی</a></li>
+						<li class="breadcrumb-list__item breadcrumb-list__item--active">سبد خرید</li>
+					</ul>
+
+					<!--=======  End of breadcrumb list  =======-->
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=======  End of breadcrumb area =======-->
+
+	<!--=============================================
+	=            cart page content         =
+	=============================================-->
+
+	<div class="shopping-cart-area mb-130">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 mb-30">
+					<!--=======  cart table  =======-->
+
+					<div class="cart-table-container">
+						<table class="cart-table">
+
+								<div class="container mt-5">
+							<h2 class="mb-4">سبد خرید شما</h2>
+							<form style="display:none">
+								{% csrf_token %}
+							</form>
+
+							{% if items %}
+								{% for item in items %}
+								<div class="cart-item-row" style="display:flex; align-items:center; justify-content:space-between; padding:15px; border-bottom:1px solid #ddd;">
+																	<div class="cart-img">
+										<img src="{{ item.product.image.url }}" style="width:80px; height:80px; object-fit:cover;">
+									</div>
+									<div class="cart-title" style="width:200px;">
+										{{ item.product.title }}
+									</div>
+									<div class="cart-unit-price">
+										{{ item.unit_price }} تومان
+									</div>
+											<div class="cart-qty" style="display:flex; gap:10px; align-items:center;">
+												<button class="qty-btn minus" data-product="{{ item.product.id }}">-</button>
+
+												<span class="item-qty" id="qty-{{ item.product.id }}">{{ item.quantity }}</span>
+
+												<button class="qty-btn plus" data-product="{{ item.product.id }}">+</button>
+											</div>
+
+											<div class="cart-row-total">
+												<span id="total-{{ item.product.id }}">{{ item.total_price }}</span> تومان
+											</div>
+
+											
+								</div>
+								
+								{% endfor %}
+								
+
+								<div class="cart-summary mt-4 p-3" style="border:1px solid #ccc; background:#f9f9f9;">
+									<p>جمع کل: <strong id="cart-total">{{ total_price }}</strong> تومان</p>
+									<p>تخفیف: <strong id="cart-discount">{{ discount }}</strong> تومان</p>
+									<p>مبلغ نهایی: <strong id="cart-final">{{ final_price }}</strong> تومان</p>
+								</div>
+
+							{% else %}
+								<p>سبد خرید شما خالی است!</p>
+							{% endif %}
+
+						</div>
+
+							</div>
+						</div>
+
+							<tbody>
+								<tr>
+									
+					<!--=======  End of cart table  =======-->
+				</div>
+				<br></br>
+				<div class="col-lg-12 mb-80">
+					<!--=======  coupon area  =======-->
+
+					<div class="cart-coupon-area pb-30">
+						<div class="row align-items-center">
+							<div class="col-lg-6 mb-md-30 mb-sm-30">
+								<!--=======  coupon form  =======-->
+
+								<div class="lezada-form coupon-form">
+									<form method="POST" action="{% url 'cart:apply_coupon'%}">
+										{% csrf_token %}
+										<div class="row">
+											<div class="col-md-7 mb-sm-10">
+												<input type="text"  name="code" placeholder="کد کوپن خود را وارد کنید">
+											</div>
+											<div class="col-md-5">
+												<button class="lezada-button lezada-button--medium">اعمال کوپن و استفاده</button>
+											</div>
+											<div class="col-md-6 text-left">
+												<a href="{% url 'accounts:checkout' %}" 
+												class="lezada-button lezada-button--medium">
+													ادامه فرایند خرید
+												</a>
+											</div>
+											
+										</div>
+										
+									</form>
+								</div>
+
+								<!--=======  End of coupon form  =======-->
+							</div>
+							
+
+					<!--=======  End of coupon area  =======-->
+				<!--</div>-->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=====  End of cart page content  ======-->
+
+ {% endblock %}

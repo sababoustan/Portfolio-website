@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}صفحه جزییات محصول{% endblock %}
+
+{% block content %}
+{% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+	<!--=======  breadcrumb area =======-->
+
+	<div class="breadcrumb-area breadcrumb-bg-2 pt-50 pb-70">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="breadcrumb-title">خرید کنید</h1>
+
+					<!--=======  breadcrumb list  =======-->
+
+					<ul class="breadcrumb-list">
+						<li class="breadcrumb-list__item"><a href="index.html">صفحه اصلی</a></li>
+						<li class="breadcrumb-list__item"><a href="shop-left-sidebar.html">فروشگاه</a></li>
+						<li class="breadcrumb-list__item breadcrumb-list__item--active">خرید محصول</li>
+					</ul>
+
+					<!--=======  End of breadcrumb list  =======-->
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=======  End of breadcrumb area =======-->
+
+	<!--=============================================
+    =            shop page content         =
+    =============================================-->
+
+	<div class="container mt-100 mb-100">
+    <div class="row">
+
+        <!--==================  ستون تصویر  ==================-->
+        <div class="col-lg-6 mb-30">
+            <div class="single-image">
+                <img src="{{ product.image.url }}" class="product-main-img">
+            </div>
+        </div>
+
+        <!--==================  ستون اطلاعات  ==================-->
+        <div class="col-lg-6">
+
+            <div class="shop-product__title_mb-15">
+                <h2>{{ product.title }}</h2>
+            </div>
+					<div class="product-price">
+						{% if product.discount_price %}
+							<span class="old-price">{{ product.price }} تومان</span>
+							<span class="new-price">{{ product.discount_price }} تومان</span>
+						{% else %}
+							<span class="new-price">{{ product.price }} تومان</span>
+						{% endif %}
+					</div>
+
+            <div class="shop-product__short-desc mb-50">
+				<div class="shop-product__block__title">توضیحات:</div>
+                {{ product.description }}
+            </div>
+
+            <div class="shop-product__block__title">موجودی:</div>
+            <div class="shop-product__block__value">{{ product.stock }}</div>
+
+            <div class="quick-view-other-info pb-0">
+				<div class="shop-product__block__title">کدمحصول:</div>
+                <table>
+                    <td class="quickview-value">{{ product.sku }}</td>
+                </table>
+            </div>
+
+            <br>
+
+           <div class="add-to-cart-box">
+
+					<div style="display:flex; align-items:center; gap:10px;">
+						<button type="button" class="qty-btn-product" data-action="minus" data-product="{{ product.id }}">-</button>
+
+						<input
+							type="number"
+							id="qty-input"
+							name="quantity"
+							value="1"
+							min="1"
+							data-stock="{{ product.stock }}"
+							readonly
+							style="width:50px; text-align:center;"
+						>
+
+						<button type="button" class="qty-btn-product" data-action="plus" data-product="{{ product.id }}">+</button>
+					</div>
+
+					<div id="qty-error" style="color:red; margin-top:6px; display:none;"></div>
+
+					<br>
+
+					<button type="button"
+							class="add-to-cart-btn"
+							data-product="{{ product.id }}">
+						افزودن به سبد خرید
+					</button>
+
+				</div>
+
+        </div>
+
+    </div>
+</div>
+
+			<!--=======  End of other info table  =======-->
+{# ==================== COMMENTS SECTION ==================== #}
+
+<!-- ================= COMMENTS ================= -->
+<!-- ================= COMMENTS SECTION ================= -->
+<section class="comment-section">
+
+    <!-- ====== COMMENTS LIST ====== -->
+    <div class="product-comments">
+
+        <h4 class="comments-title">
+            نظرات کاربران ({{ comments.count }})
+        </h4>
+
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comment-card">
+
+                    <div class="comment-header">
+                        <span class="comment-user">
+                            {{ comment.user.username }}
+                        </span>
+
+                        <span class="comment-date">
+                            {{ comment.created_at|date:"Y/m/d" }}
+                        </span>
+                    </div>
+
+                    <p class="comment-text">
+                        {{ comment.body }}
+                    </p>
+
+                    <!-- ===== ADMIN REPLY ===== -->
+                    {% for reply in comment.replies.all %}
+                        {% if reply.is_active %}
+                            <div class="admin-reply">
+                                <strong>پاسخ مدیر</strong>
+                                <p>{{ reply.body }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-comments">
+                هنوز نظری برای این محصول ثبت نشده است.
+            </p>
+        {% endif %}
+
+    </div>
+
+    <!-- ====== COMMENT FORM ====== -->
+    <div class="comment-form-wrapper">
+
+        <h4 class="comment-form-title">
+            ثبت نظر
+        </h4>
+
+        {% if user.is_authenticated %}
+            <form method="post" class="comment-form">
+                {% csrf_token %}
+
+                <textarea
+                    name="body"
+                    class="comment-textarea"
+                    placeholder="نظر خود را بنویسید..."
+                    required
+                ></textarea>
+
+                <button type="submit" class="comment-submit-btn">
+                    ارسال نظر
+                </button>
+
+                <p class="comment-note">
+                    نظر شما پس از تأیید مدیر نمایش داده خواهد شد.
+                </p>
+            </form>
+        {% else %}
+            <p class="login-warning">
+                برای ثبت نظر باید
+                <a href="{% url 'accounts:login' %}">وارد حساب کاربری</a>
+                شوید.
+            </p>
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+ {% endblock %}

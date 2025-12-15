@@ -1,0 +1,102 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html class="no-js'" lang="zxx">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>لزادا - الگوی تجارت الکترونیک چند منظوره بوت استرپ 5</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Favicon -->
+  <link rel="icon" href="{%static 'assets/images/favicon.ico' %}">
+
+  <!-- CSS
+	============================================ -->
+  <!-- Bootstrap CSS -->
+  <link href="{%static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- FontAwesome CSS -->
+  <link href="{%static 'assets/css/font-awesome.min.css' %}" rel="stylesheet">
+
+  <!-- Ionicons CSS -->
+  <link href="{%static 'assets/css/ionicons.min.css' %}" rel="stylesheet">
+
+  <!-- Themify CSS -->
+  <link href="{%static 'assets/css/themify-icons.css' %}" rel="stylesheet">
+
+  <!-- Plugins CSS -->
+  <link href="{%static 'assets/css/plugins.css' %}" rel="stylesheet">
+
+  <!-- Helper CSS -->
+  <link href="{%static 'assets/css/helper.css' %}" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link href="{%static 'assets/css/main.css' %}" rel="stylesheet">
+
+
+  <!-- Modernizer JS -->
+  <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+
+</head>
+<body>
+
+    <!-- Header -->
+    {% include 'partials/header.html' %}
+
+    <!-- Page Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- JS -->
+          	<script src="{%static 'assets/js/vendor/jquery.min.js' %}"></script>
+
+            <!-- Popper JS -->
+            <script src="{%static 'assets/js/popper.min.js' %}"></script>
+
+            <!-- Bootstrap JS -->
+            <script src="{%static 'assets/js/bootstrap.min.js' %}"></script>
+
+            <!-- Plugins JS -->
+            <script src="{%static 'assets/js/plugins.js' %}"></script>
+
+            <!-- Main JS -->
+            <script src="{%static 'assets/js/main.js' %}"></script>
+
+            <!-- wishlist JS -->
+            <script src="{% static 'assets/js/wishlist.js' %}"></script>
+
+            <!-- cart JS -->
+            <script src="{% static 'assets/js/cart.js' %}"></script>
+
+            <!-- quantity JS -->
+            <script src="{% static 'assets/js/quantity.js' %}"></script>
+
+            <!-- checkout JS -->
+            <script src="{% static 'assets/js/checkout.js' %}"></script>
+
+
+<script>
+window.addEventListener("pageshow", function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+    const navType = performance.getEntriesByType("navigation")[0].type;
+    if (navType === "back_forward") {
+        window.location.reload();
+    }
+});
+</script>
+
+</body>
+</html>

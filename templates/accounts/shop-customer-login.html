@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}صفحه عضویت{% endblock %}
+
+{% block content %}
+	<!--=======  breadcrumb area =======-->
+
+	<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-130">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="breadcrumb-title">ورود مشتری</h1>
+
+					<!--=======  breadcrumb list  =======-->
+
+					<ul class="breadcrumb-list">
+						<li class="breadcrumb-list__item"><a href="{%url 'main:home'%}">صفحه اصلی</a></li>
+						<li class="breadcrumb-list__item breadcrumb-list__item--active">ورود مشتری</li>
+					</ul>
+
+					<!--=======  End of breadcrumb list  =======-->
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=======  End of breadcrumb area =======-->
+
+	<!--=============================================
+    =            login page content         =
+    =============================================-->
+				<div class="login-area mb-130 mb-md-70 mb-sm-70 mb-xs-70 mb-xxs-70">
+		<div class="container">
+			<div class="row">
+				{% if messages %}
+				<div style="margin:20px;">
+					{% for message in messages %}
+						<div class="alert alert-warning"
+							style="padding:12px;background:#ffe8c6;border-radius:6px;margin-bottom:10px;">
+							{{ message }}
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+				<div class="col-lg-6 mb-md-50 mb-sm-50">
+					<div class="lezada-form login-form">
+
+								<form method="POST" action="">
+										{% csrf_token %}
+										<div class="row">
+
+                            		<div class="col-lg-12">
+                                		<!-- login title -->
+                                		<div class="section-title section-title--login text-center mb-50">
+                                    		<h2 class="mb-20">وارد شدن</h2>
+                                    		<p>خیلی خوبه که برگشتی!</p>
+                                		</div>
+                            		</div>
+										<div class="col-lg-12 mb-60">
+        									{{ login_form.username_or_email }}
+    									</div>
+
+    									<div class="col-lg-12 mb-60">
+        									{{ login_form.password }}
+    									</div>
+										<div class="col-lg-12">
+                                			<input type="checkbox"> 
+                                			<span class="remember-text">مرا به خاطر بسپار</span>
+                                			<a href="#" class="reset-pass-link">رمز عبور خود را فراموش کرده‌اید؟</a>
+                            			</div>
+									<div class="col-lg-12 text-center mb-30">
+    									<button type="submit" class="lezada-button lezada-button--medium">وارد شدن</button>
+									</div>
+								</form>
+							</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="lezada-form login-form--register">
+						<form action="#">
+							<div class="row">
+								<div class="col-lg-12">
+									<!--=======  login title  =======-->
+
+									<div class="section-title section-title--login text-center mb-50">
+										<h2 class="mb-20">ثبت نام</h2>
+										<p>اگر حساب کاربری ندارید، همین الان ثبت نام کنید!</p>
+									</div>
+
+									<!--=======  End of login title  =======-->
+								</div>
+								</form>
+								<form method="POST" action="{% url 'accounts:register' %}"  class="lezada-form">
+									{% csrf_token %}
+
+									<div class="col-lg-12 mb-30">
+										<div class="col-lg-12 mb-60">
+											{{ register_form.username }}
+										</div>
+
+										<div class="col-lg-12 mb-60">
+											{{ register_form.email }}
+										</div>
+
+										<div class="col-lg-12 mb-60">
+											{{ register_form.password }}
+										</div>
+
+										<div class="col-lg-12 text-center">
+											<button type="submit" class="lezada-button lezada-button--medium">
+												ثبت نام
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--=====  End of login content  ======-->
+
+	 {% endblock %}
