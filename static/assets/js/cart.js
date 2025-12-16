@@ -21,7 +21,15 @@ document.addEventListener("click", function (e) {
 
     const productId = btn.dataset.product;
     const action = btn.classList.contains("plus") ? "increase" : "decrease";
+    const stock = parseInt(btn.dataset.stock);
+    const qtySpan = document.getElementById(`qty-${productId}`);
+    const currentQty = parseInt(qtySpan.innerText);
 
+    if (action === "increase" && currentQty >= stock) {
+        alert("حداکثر موجودی محصول همین تعداد است");
+        return; 
+    }
+    
     fetch(CART_UPDATE_URL, {
         method: "POST",
         headers: {
@@ -32,7 +40,10 @@ document.addEventListener("click", function (e) {
     })
     .then(res => res.json())
     .then(data => {
-
+        if (data.error === "max_stock") {
+        alert(data.message);
+        return;
+        }
         if (data.removed) {
             location.reload();
             return;

@@ -127,8 +127,14 @@ class UpdateCartAjaxView(CartMixin, View):
         removed = False 
         
         if action == "increase":
-            item.quantity += 1
-            item.save()
+            if item.quantity < item.product.stock:
+                item.quantity += 1
+                item.save()
+            else:
+                return JsonResponse({
+                    "error": "max_stock",
+                    "message": "حداکثر موجودی محصول همین تعداد است"
+                })
 
         elif action == "decrease":
             if item.quantity > 1:
