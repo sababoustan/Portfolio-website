@@ -68,7 +68,7 @@
             <!--=======  logo   =======-->
 
             <div class="logo">
-              <a href="index.html">
+              <a href="{%url 'main:home'%}">
                 <img src="{% static 'assets/images/logo.png' %}" class="img-fluid" alt="">
               </a>
             </div>
@@ -183,7 +183,7 @@
             </button>
             <!--Site Mobile Menu Toggle End-->
             <ul class="dl-menu dl-menu-toggle">
-              <li class=""><a href="#">صفحه اصلی</a>
+              <li class=""><a href="{%url 'main:home'%}">صفحه اصلی</a>
                 <ul class="dl-submenu">
                   <li class=""> <a href="#">خانه گروه یک</a>
                     <ul class="dl-submenu">

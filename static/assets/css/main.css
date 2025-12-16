@@ -82,7 +82,9 @@
     object-fit: cover;     
 }
 
-
+.img-fluid-3{
+  height: 170px;
+}
 html, body {
   height: 100%;
 }

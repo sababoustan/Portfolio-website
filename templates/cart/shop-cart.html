@@ -75,6 +75,10 @@
 								</div>
 								
 								{% endfor %}
+								<script>
+									const CART_UPDATE_URL = "{% url 'cart:update_cart_ajax' %}";
+								</script>
+
 								
 
 								<div class="cart-summary mt-4 p-3" style="border:1px solid #ccc; background:#f9f9f9;">
