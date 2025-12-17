@@ -194,6 +194,34 @@
                   </div>
                   {% endfor %}
                    </div>  
+                    <div class="pagination-wrapper">
+                      <ul class="pagination">
+
+                          {% if has_previous %}
+                              <li class="page-item">
+                                  <a class="page-link prev" href="?page={{ current_page|add:'-1' }}">
+                                      « قبلی
+                                  </a>
+                              </li>
+                          {% endif %}
+
+                          <li class="page-item active">
+                              <span class="page-link">
+                                  صفحه {{ current_page }} از {{ total_pages }}
+                              </span>
+                          </li>
+
+                          {% if has_next %}
+                              <li class="page-item">
+                                  <a class="page-link next" href="?page={{ current_page|add:'1' }}">
+                                      بعدی »
+                                  </a>
+                              </li>
+                          {% endif %}
+
+                      </ul>
+                  </div>
+
 
           </div> 
 

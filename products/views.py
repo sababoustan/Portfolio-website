@@ -7,16 +7,6 @@ from comments.models import Comment
 from comments.forms import CommentForm
 
 
-# Create your views here.
-class ProductListView(ListView):
-    model = Product
-    template_name = "main/index.html"
-    context_object_name = "products"
-    
-    def get_queryset(self):
-        return Product.objects.filter(is_active=True)
-
-
 class ProductDetailView(DetailView):
     model = Product
     template_name = "products/shop-product-basic.html"
