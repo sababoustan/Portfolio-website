@@ -1,12 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from .models import Cart, CartItem, Coupon, Wishlist, Product
 from django.db.models import Count
-
-
 # Create your views here.
 class CartMixin:
     def get_cart(self):
@@ -217,3 +215,4 @@ class WishlistToggleView(View):
             "status": status,
             "wishlist_count": wishlist_count
         })
+        

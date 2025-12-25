@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'products',
     'cart.apps.CartConfig',
     'main',
-    'comments'
+    'comments',
+    'orders'
 ]
 
 MIDDLEWARE = [

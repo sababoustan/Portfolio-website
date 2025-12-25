@@ -28,7 +28,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 col-12">
            
-            <form method="POST" action="{% url 'accounts:payment_request' %}">
+            <form method="POST" action="{% url 'orders:payment_request' %}">
                 {% csrf_token %}
 
                 <div class="address-box">
