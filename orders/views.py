@@ -1,17 +1,12 @@
 from django.shortcuts import render
-import uuid
-import requests 
 from django.views import View
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from cart.models import Cart
 from accounts.models import Address
-from .models import Order, OrderItem
-from .services import verify_and_pay_order
+from .models import Order
+from .services import verify_and_pay_order, create_order, request_zibal_payment
 
-MERCHANT = "zibal"   
-ZIBAL_REQUEST = "https://gateway.zibal.ir/v1/request"
-ZIBAL_VERIFY = "https://gateway.zibal.ir/v1/verify"
 ZIBAL_STARTPAY = "https://gateway.zibal.ir/start/"
 
 
@@ -54,43 +49,25 @@ class PaymentRequestView(View):
         order_note = request.POST.get("order_note")
         total_price = final_price + shipping_cost
         cart = Cart.objects.filter(user=user).first()
-        address = get_object_or_404(Address, id=address_id)
-        authority = str(uuid.uuid4())
-        
-        order = Order.objects.create(
+        address = get_object_or_404(Address, id=address_id, user=user)        
+        order = create_order(
             user=user,
             cart=cart,
             address=address,
             total_price=total_price, 
-            status=Order.status_order.PendingPayment,
-            authority=authority,
             order_note=order_note
         )
-        for item in cart.items.all():
-            OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity,
-                total_price=item.total_price
-            )
         callback_url = request.build_absolute_uri(
             reverse("orders:payment_verify")
         )
-        payload = {
-            "merchant": MERCHANT,
-            "amount": total_price,
-            "callbackUrl": callback_url,
-            "description": "پرداخت تستی فروشگاه",
-            "orderId": authority
-        }
-        response = requests.post(ZIBAL_REQUEST, json=payload).json()
-        if response["result"] == 100:
-            trackId = response["trackId"]
-            return redirect(ZIBAL_STARTPAY + str(trackId))
+        response = request_zibal_payment(order, callback_url)
+        if response.get("result") == 100:
+            return redirect(ZIBAL_STARTPAY + str(response["trackId"]))
         
-        return render(request, "orders/payment_error.html",
-                      {"message": response.get("message",
-                                               "خطا در اتصال به درگاه")})
+        return render(request, 
+                      "orders/payment_error.html",
+                      {"message": response.get("message","خطا در اتصال به درگاه")}
+                      )
     
    
 class PaymentVerifyView(View):
