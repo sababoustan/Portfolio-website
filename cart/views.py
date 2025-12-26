@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from .models import Cart, Coupon, Wishlist, Product
-from .services import AddToCartService
+from .services import AddToCartService, UpdateCartItemService
 # Create your views here.
 
 
@@ -97,46 +97,25 @@ class UpdateCartAjaxView(CartMixin, View):
     def post(self, request):
         product_id = request.POST.get("product_id")
         action = request.POST.get("action")
-
         cart = self.get_cart()
-        product = get_object_or_404(Product, id=product_id)
-
-        item = cart.items.filter(product=product).first()
-
-        if not item:
-            return JsonResponse({"error": "Item not found"}, status=404)
-        
-        removed = False 
-        
-        if action == "increase":
-            if item.quantity < item.product.stock:
-                item.quantity += 1
-                item.save()
-            else:
+        try:
+            data = UpdateCartItemService.update(
+                cart=cart,
+                product_id=product_id,
+                action=action
+            )
+        except ValueError as e:
+            if str(e) == "MAX_STOCK":
                 return JsonResponse({
                     "error": "max_stock",
                     "message": "حداکثر موجودی محصول همین تعداد است"
                 })
+            elif str(e)== "ITEM_NOT_FOUND":
+                return JsonResponse({"error": "Item not found"}, status=404)
+            return JsonResponse({"error": "Invalid request"}, status=400)
 
-        elif action == "decrease":
-            if item.quantity > 1:
-                item.quantity -= 1
-                item.save()
-            else:
-                item.delete()
-                removed = True 
+        return JsonResponse(data)
 
-        cart.update_total_price()
-
-        return JsonResponse({
-            "removed": removed,
-            "quantity": item.quantity if not removed else 0,
-            "item_total": item.total_price if not removed else 0,
-            "cart_total": cart.total_price,
-            "discount": cart.get_discount_amount(),
-            "final_total": cart.get_final_price(),
-            "cart_count": cart.get_total_quantity(),
-        })
     
           
 class ApplyCouponView(CartMixin, View):
