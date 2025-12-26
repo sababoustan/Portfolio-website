@@ -3,13 +3,14 @@ from django.views import View
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
-from .models import Cart, CartItem, Coupon, Wishlist, Product
-from django.db.models import Count
+from .models import Cart, Coupon, Wishlist, Product
+from .services import AddToCartService
 # Create your views here.
+
+
 class CartMixin:
     def get_cart(self):
         request = self.request
-
         if request.user.is_authenticated:
             cart = Cart.objects.filter(
                 user=request.user,
@@ -23,7 +24,7 @@ class CartMixin:
                 )
 
             return cart
-
+        
         if not request.session.session_key:
             request.session.create()
 
@@ -37,7 +38,6 @@ class CartMixin:
                 session_id=request.session.session_key,
                 status=Cart.Status.DRAFT
             )
-
         return cart
 
 
@@ -59,34 +59,18 @@ class CartView(CartMixin, View):
 class AddToCartView(CartMixin, View):
     def post(self, request, product_id):
         cart = self.get_cart()
-        product = Product.objects.get(id=product_id)
         qty = int(request.POST.get("quantity", 1))
-        item = cart.items.filter(product=product).first()
-        if item:
-            new_qty = item.quantity + qty
-
-            if new_qty > product.stock:
-                return JsonResponse({
-                    "error": "این تعداد بیشتر از موجودی محصول است"
-                }, status=400)
-
-            item.quantity = new_qty
-            item.save()
-        else:
-            if qty > product.stock:
-                return JsonResponse({
-                    "error": "این تعداد موجود نیست"
-                }, status=400)
-            CartItem.objects.create(
+        try:
+            cart_count = AddToCartService.add(
                 cart=cart,
-                product=product,
-                unit_price=product.price,
-                quantity=qty
+                product_id=product_id,
+                qty=qty
             )
-        cart.refresh_from_db()
-        cart.update_total_price()
-        cart_count = cart.items.aggregate(total=Count("id"))["total"]
-
+        except ValueError as e:
+            return JsonResponse(
+                {"error": str(e)},
+                status=400
+            )
         return JsonResponse({
             "status": "added",
             "cart_count": cart_count
