@@ -70,6 +70,7 @@ class UpdateCartItemService:
             "cart_count": cart.get_total_quantity(),
         }
         
+        
 class ApplyCouponService:
     
     @staticmethod

@@ -72,10 +72,7 @@ class RegisterView(View):
             user.save()
             messages.success(request, "ثبت نام با موفقطیت  انجام شد")
             return redirect("main:home")
-        else:
-            register_form = RegisterForm()
-        print("VALID:", register_form.is_valid())
-        print(register_form.errors)
+        
         return render(request, "accounts/shop-customer-login.html", {
             "login_form": LoginForm(),
             "register_form": RegisterForm(),
@@ -85,24 +82,21 @@ class RegisterView(View):
 class CheckoutView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
     redirect_field_name = 'next'
-    model = Address
 
     def get(self, request):
         address = Address.objects.filter(user=request.user)
         selected_id = request.GET.get("selected_address")
         form = AddressForm()
         cart = Cart.objects.filter(user=request.user).first()
-        if cart:
-            items = cart.items.all()
-        else:
-            items = []
+        items = cart.items.all() if cart else []
+        final_price = cart.get_final_price() if cart else 0
         if address:
             context = {
             'address_old': address,
             'selected_id': selected_id,
             'form': form,
             'items': items,
-            'final_price': cart.get_final_price(),
+            'final_price': final_price,
             
             }
             return render(request, "accounts/address_checkout.html",context)
@@ -122,7 +116,7 @@ class CheckoutView(LoginRequiredMixin, View):
             return redirect(f"{reverse('accounts:checkout')}?selected_address={address.id}")
 
         return render(request, "accounts/address_checkout.html", {
-            "address_form": form 
+            "address_form": form,
         })
       
         

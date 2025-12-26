@@ -134,6 +134,7 @@ class ApplyCouponView(CartMixin, View):
 
         return redirect("cart:cart_view") 
     
+    
 class WishlistListView(View):
     def get(self, request):
         items = Wishlist.objects.filter(user=request.user)
