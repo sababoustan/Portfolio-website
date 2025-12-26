@@ -1,7 +1,7 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from products.models import Product
-from .models import CartItem
+from .models import CartItem, Coupon
 
 
 class AddToCartService:
@@ -70,3 +70,21 @@ class UpdateCartItemService:
             "cart_count": cart.get_total_quantity(),
         }
         
+class ApplyCouponService:
+    
+    @staticmethod
+    def apply(code, cart):
+        if not code:
+            raise ValueError("EMPTY_CODE")
+        coupon = Coupon.objects.filter(code=code).first()
+        if not coupon:
+            raise ValueError("INVALID_CODE")
+        cart.coupon = coupon
+        cart.save()
+        discount = cart.get_discount_amount()
+        discount = cart.get_discount_amount()
+        if discount == 0:
+            cart.coupon = None
+            cart.save()
+            raise ValueError("CONDITION_NOT_MET")
+        return discount

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from .models import Cart, Coupon, Wishlist, Product
-from .services import AddToCartService, UpdateCartItemService
+from .services import AddToCartService, UpdateCartItemService, ApplyCouponService
 # Create your views here.
 
 
@@ -110,37 +110,29 @@ class UpdateCartAjaxView(CartMixin, View):
                     "error": "max_stock",
                     "message": "حداکثر موجودی محصول همین تعداد است"
                 })
-            elif str(e)== "ITEM_NOT_FOUND":
+            elif str(e) == "ITEM_NOT_FOUND":
                 return JsonResponse({"error": "Item not found"}, status=404)
             return JsonResponse({"error": "Invalid request"}, status=400)
 
         return JsonResponse(data)
-
     
           
 class ApplyCouponView(CartMixin, View):
     def post(self, request):
         cart = self.get_cart()
         code = request.POST.get("code")
-        if not code:
-            messages.error(request, "کد تخفیف وارد نشده است.")
-            return redirect("cart:cart_view")
-        coupon = Coupon.objects.filter(code=code).first()
-        if not coupon:
-            messages.error(request, "کد تخفیف اشتباه است.")
-            return redirect("cart:cart_view")
-        cart.coupon = coupon
-        cart.save()
-        discount = cart.get_discount_amount()
-        if discount == 0:
-            messages.error(request, "شرایط اعمال کد تخفیف رعایت نشده است.")
-            cart.coupon = None
-            cart.save()
-        else:
+        try:
+            ApplyCouponService.apply(cart, code)
             messages.success(request, "کد تخفیف با موفقیت اعمال شد.")
-        
-        return redirect("cart:cart_view")
-    
+        except ValueError as e:
+            if str(e) == "EMPTY_CODE":
+                messages.error(request, "کد تخفیف وارد نشده است.")
+            elif str(e) == "INVALID_CODE":
+                messages.error(request, "کد تخفیف اشتباه است.")
+            elif str(e) == "CONDITION_NOT_MET":
+                messages.error(request, "شرایط اعمال کد تخفیف رعایت نشده است.")
+
+        return redirect("cart:cart_view") 
     
 class WishlistListView(View):
     def get(self, request):

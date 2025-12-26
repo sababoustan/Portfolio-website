@@ -3,6 +3,15 @@
 {% block title %}سبدخرید{% endblock %}
 
 {% block content %}
+{% if messages %}
+  <div class="flash-messages">
+    {% for message in messages %}
+      <div class="flash flash-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
 
 	<!--=======  breadcrumb area =======-->
 
