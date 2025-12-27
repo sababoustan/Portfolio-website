@@ -43,6 +43,7 @@ def request_zibal_payment(order, callback_url):
         }
     return requests.post(ZIBAL_REQUEST, json=payload).json()
 
+
 def verify_and_pay_order(order, track_id):
     if order.status == Order.status_order.Paid:
         return order
