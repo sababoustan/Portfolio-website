@@ -52,13 +52,13 @@ class ProductSearchView(ListView):
     context_object_name = "products"
     
     def get_queryset(self):
-        search = self.request.GET.get('search', '')
+        search = self.request.GET.get('search', '').strip()
+        qs = Product.objects.filter(is_active=True)
         if search:
-            return Product.objects.filter(
+            qs = qs.filter(
                 Q(title__icontains=search) |
                 Q(description__icontains=search) |
                 Q(slug__icontains=search)
             )
-        else:
-            return Product.objects.filter(is_active=True)
+        return qs
             

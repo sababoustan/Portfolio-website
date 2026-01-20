@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.urls import reverse
-from django.shortcuts import render, redirect, get_object_or_404
 from cart.models import Cart
 from accounts.models import Address
 from .models import Order

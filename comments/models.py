@@ -1,6 +1,8 @@
 from django.db import models
 from accounts.models import User
 from products.models import Product
+
+
 # Create your models here.
 class Comment(models.Model):
     user = models.ForeignKey(
