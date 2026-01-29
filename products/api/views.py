@@ -57,6 +57,7 @@ class ProductCommentAPI(ListCreateAPIView):
         
 class ProductSearchAPI(ListAPIView):
     serializer_class = ProductDetailSerializer
+    
     def get_queryset(self):
         search = self.request.query_params.get('search', '').strip()
         qs = Product.objects.filter(is_active=True)
