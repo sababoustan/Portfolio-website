@@ -26,11 +26,11 @@ class AddToCartService:
                 unit_price=product.price,
                 quantity=qty
             )
-            cart.refresh_from_db()
-            cart.update_total_price()
-            return cart.items.count()
-        
+        cart.refresh_from_db()
+        cart.update_total_price()
+        return cart.get_total_quantity()
 
+        
 class UpdateCartItemService:
 
     @staticmethod
@@ -44,7 +44,7 @@ class UpdateCartItemService:
         removed = False 
         
         if action == "increase":
-            if item.quantity < item.product.stock:
+            if item.quantity >= item.product.stock:
                 raise ValueError("MAX_STOCK")
             item.quantity += 1
             item.save()
@@ -55,7 +55,7 @@ class UpdateCartItemService:
                 item.save()
             else:
                 item.delete()
-                removed = True 
+                removed = True
         else:
             raise ValueError("INVALID_ACTION")
 
@@ -82,7 +82,6 @@ class ApplyCouponService:
             raise ValueError("INVALID_CODE")
         cart.coupon = coupon
         cart.save()
-        discount = cart.get_discount_amount()
         discount = cart.get_discount_amount()
         if discount == 0:
             cart.coupon = None

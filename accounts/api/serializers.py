@@ -39,9 +39,8 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "email",
         ]
-       
         
-        
+
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, 
                                          trim_whitespace=False)
@@ -67,6 +66,7 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"new_password": "رمز جدید نباید با رمز قدیمی یکسان باشد"})
         
         return attrs
+          
           
 class LoginSerializer(serializers.Serializer):
     username_or_email = serializers.CharField()
