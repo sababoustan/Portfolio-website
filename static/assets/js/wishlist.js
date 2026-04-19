@@ -1,4 +1,6 @@
-// ---------- Get CSRF Token ----------
+// ----------------------------------
+// Get CSRF Token
+// ----------------------------------
 function getCookie(name) {
     let cookieValue = null;
     const cookies = document.cookie.split(';');
@@ -12,79 +14,88 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// ---------- Add / Remove (Toggle) From Product Cards ----------
-if (!window.__wishlistBound) {
-    window.__wishlistBound = true;
+if (!window.__WISHLIST_AJAX_BOUND__) {
+    window.__WISHLIST_AJAX_BOUND__ = true;
 
+    // ----------------------------------
+    // Toggle Wishlist From Product Cards
+    // ----------------------------------
+document.addEventListener("click", function (e) {
+
+    const btn = e.target.closest("[data-product]");
+    if (!btn) return;
+
+    e.preventDefault();
+
+    const id = btn.dataset.product;
+
+    fetch(`/api/wishlist/toggle/${id}/`, {
+        method: "POST",
+        credentials: "include",
+        headers: { 
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/json"
+         }
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        const icon = btn.querySelector("i");
+        if (icon) {
+        if (data.status === "added") icon.classList.add("active");
+        else icon.classList.remove("active");
+        }
+
+        const headerCount = document.querySelector("#wishlist-count");
+        if (headerCount) headerCount.innerText = data.wishlist_count;
+
+    });
+
+});
+
+    // ----------------------------------
+    // Remove Item From Wishlist Page
+    // ----------------------------------
     document.addEventListener("click", function (e) {
-        const btn = e.target.closest(".add-to-wishlist");
+
+        const btn = e.target.closest(".remove-wishlist");
         if (!btn) return;
 
         e.preventDefault();
+        const id = btn.dataset.id;
 
-        const id = btn.dataset.product;
-        if (!id) return;
-
-        fetch(`/cart/wishlist/toggle/${id}/`, {
+        fetch(`/api/wishlist/toggle/${id}/`, {
             method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken")
+            credentials: "include",
+            headers: { 
+                "X-CSRFToken": getCookie("csrftoken"),
+                "Content-Type": "application/json"
             }
         })
         .then(res => res.json())
         .then(data => {
-            const icon = btn.querySelector("i");
-            const headerCount = document.querySelector("#wishlist-count");
 
-            if (data.status === "added") {
-            icon.classList.add("active");
-            } else {
-                icon.classList.remove("active");
-            }
+            if (data.status === "removed") {
 
-            if (headerCount && data.wishlist_count !== undefined) {
-                headerCount.innerText = data.wishlist_count;
+                btn.closest("tr").remove();
+
+                const headerCount = document.querySelector("#wishlist-count");
+                if (headerCount && typeof data.wishlist_count !== "undefined") {
+                    headerCount.innerText = data.wishlist_count;
+                }
+
+                if (document.querySelectorAll("tbody tr").length === 0) {
+                    document.querySelector("tbody").innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                هنوز هیچ محصولی در لیست علاقه‌مندی‌ها نیست.
+                            </td>
+                        </tr>
+                    `;
+                }
             }
         });
     });
 }
 
-// ---------- Remove From Wishlist Page ----------
-document.addEventListener("click", function (e) {
-    const btn = e.target.closest(".remove-wishlist");
-    if (!btn) return;
 
-    e.preventDefault();
-
-    const id = btn.dataset.id;
-
-    fetch(`/cart/wishlist/toggle/${id}/`, {
-        method: "POST",
-        headers: {
-            "X-CSRFToken": getCookie("csrftoken")
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-
-        if (data.status === "removed") {
-
-            btn.closest("tr").remove();
-
-            const headerCount = document.querySelector(".wishlist-count");
-            if (headerCount && typeof data.wishlist_count !== "undefined") {
-                headerCount.innerText = data.wishlist_count;
-            }
-
-            if (document.querySelectorAll("tbody tr").length === 0) {
-                document.querySelector("tbody").innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center">
-                            هنوز هیچ محصولی در لیست علاقه‌مندی‌ها نیست.
-                        </td>
-                    </tr>
-                `;
-            }
-        }
-    });
-});

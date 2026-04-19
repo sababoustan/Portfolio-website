@@ -16,7 +16,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             "stock",
             "image",
             "category",
-            "discount_price"
+            "sku"
             ]
 
 

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("productLoaded", function () {
 
     const qtyInput = document.getElementById("qty-input");
     const errorBox = document.getElementById("qty-error");
