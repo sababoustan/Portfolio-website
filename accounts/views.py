@@ -147,3 +147,7 @@ class ConfirmOrderView(View):
                 'items': items,
             }
             return render(request, "orders/preview_order.html", context)
+
+
+def profile_page(request):
+    return render(request, "accounts/profile.html")
