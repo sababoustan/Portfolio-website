@@ -12,7 +12,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         write_only=True,
         min_length=8,
     )
-    
+
     class Meta:
         model = User
         fields = [
@@ -20,7 +20,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "email",
             "password"
         ]
-    
+
     def create(self, validated_data):
         user = User(
             username=validated_data["username"],
@@ -29,8 +29,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
-  
-  
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -39,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "email",
         ]
-        
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, 
@@ -48,37 +48,37 @@ class ChangePasswordSerializer(serializers.Serializer):
                                          trim_whitespace=False)
     new_password2 = serializers.CharField(write_only=True, min_length=8, 
                                           trim_whitespace=False)
-    
+
     def validate_old_password(self, value):
         user = self.context["request"].user
         if not user.check_password(value):
             raise serializers.ValidationError("رمز فعلی اشتباه است.")
         return value
-    
+
     def validate(self, attrs):
         new_passwrod = attrs.get("new_password")
         new_passwrod2 = attrs.get("new_password2")
-        
+
         if new_passwrod != new_passwrod2:
             raise serializers.ValidationError({"new_password2": "تکرار رمز با رمز یکسان نیست."})
-        
+
         if attrs.get("old_password") == new_passwrod:
             raise serializers.ValidationError({"new_password": "رمز جدید نباید با رمز قدیمی یکسان باشد"})
-        
+
         return attrs
-          
-          
+
+
 class LoginSerializer(serializers.Serializer):
     username_or_email = serializers.CharField()
     password = serializers.CharField(write_only=True, trim_whitespace=False)
-    
+
     def validate(self, attrs):
         identifier = attrs.get("username_or_email")
         password = attrs.get("password")
-        
+
         if not identifier or not password:
             raise serializers.ValidationError("نام کاربری/ایمیل و رمز عبور الزامی است.")
-        
+
         if "@" in identifier:
             try:
                 user_obj = User.objects.get(email__iexact=identifier)
@@ -91,19 +91,20 @@ class LoginSerializer(serializers.Serializer):
 
         if not user:
             raise serializers.ValidationError("نام کاربری/ایمیل یا رمز عبور اشتباه است.")
-        
+
         if not user.is_active:
             raise serializers.ValidationError("حساب کاربری غیرفعال است.")
-        
+
         attrs["user"] = user
         return attrs
-        
+
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = [
-            "username",
+            "id",
+            "full_name",
             "city",
             "street_address",
             "postal_code",

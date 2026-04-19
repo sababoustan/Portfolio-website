@@ -5,7 +5,7 @@ from .models import CartItem, Coupon
 
 
 class AddToCartService:
-    
+
     @staticmethod
     def add(cart, product_id, qty):
         product = Product.objects.get(id=product_id)
@@ -23,14 +23,14 @@ class AddToCartService:
             CartItem.objects.create(
                 cart=cart,
                 product=product,
-                unit_price=product.price,
+                unit_price=product.discount_price,
                 quantity=qty
             )
         cart.refresh_from_db()
         cart.update_total_price()
         return cart.get_total_quantity()
 
-        
+
 class UpdateCartItemService:
 
     @staticmethod
@@ -40,9 +40,9 @@ class UpdateCartItemService:
         item = cart.items.filter(product=product).first()
         if not item:
             raise ValueError("ITEM_NOT_FOUND")
-        
-        removed = False 
-        
+
+        removed = False
+
         if action == "increase":
             if item.quantity >= item.product.stock:
                 raise ValueError("MAX_STOCK")
@@ -69,10 +69,10 @@ class UpdateCartItemService:
             "final_total": cart.get_final_price(),
             "cart_count": cart.get_total_quantity(),
         }
-        
-        
+
+
 class ApplyCouponService:
-    
+
     @staticmethod
     def apply(code, cart):
         if not code:

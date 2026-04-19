@@ -10,35 +10,6 @@ ZIBAL_STARTPAY = "https://gateway.zibal.ir/start/"
 
 
 # Create your views here.
-class ConfirmOrderView(View):
-    model = Cart
-    
-    def post(self, request):
-            selected_address_id = request.POST.get("selected_address")
-            if not selected_address_id:
-                return redirect("accounts:checkout")
-            cart = Cart.objects.filter(user=request.user).first()
-            items = cart.items.all()
-            final_price = cart.get_final_price() 
-            address = Address.objects.get(id=selected_address_id, 
-                                          user=request.user)
-            if address.city == "تهران":
-                shipping_cost = 50000
-            else:
-                shipping_cost = 60000
-                
-            total_to_pay = final_price + shipping_cost
-            context = {
-                "address": address,
-                "address_id": selected_address_id,
-                "final_price": final_price,
-                "shipping_cost": shipping_cost,
-                "total_to_pay": total_to_pay,
-                'items': items,
-            }
-            return render(request, "orders/preview_order.html", context)
-        
-        
 class PaymentRequestView(View):
     def post(self, request):
         user = request.user
@@ -53,7 +24,7 @@ class PaymentRequestView(View):
             user=user,
             cart=cart,
             address=address,
-            total_price=total_price, 
+            total_price=total_price,
             order_note=order_note
         )
         callback_url = request.build_absolute_uri(
@@ -62,13 +33,14 @@ class PaymentRequestView(View):
         response = request_zibal_payment(order, callback_url)
         if response.get("result") == 100:
             return redirect(ZIBAL_STARTPAY + str(response["trackId"]))
-        
-        return render(request, 
+
+        return render(request,
                       "orders/payment_error.html",
-                      {"message": response.get("message","خطا در اتصال به درگاه")}
+                      {"message": response.get(
+                          "message", "خطا در اتصال به درگاه")}
                       )
-    
-   
+
+
 class PaymentVerifyView(View):
     def get(self, request):
         success = request.GET.get("success")

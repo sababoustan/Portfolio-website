@@ -15,7 +15,7 @@ class CartAdmin(admin.ModelAdmin):
     search_fields = ["user__username"]
     readonly_fields = ['total_price']
     inlines = [CartItemInline]
-    
+
     def discount_amount(self, obj):
         return obj.get_discount_amount()
     discount_amount.short_description = "مقدار تخفیف"
@@ -23,11 +23,8 @@ class CartAdmin(admin.ModelAdmin):
     def final_price(self, obj):
         return obj.get_final_price()
     final_price.short_description = "مبلغ نهایی"
-    
-    
+
+
 admin.site.register(Cart, CartAdmin)
 admin.site.register(Coupon)        
 admin.site.register(Wishlist)
-    
-    
-    

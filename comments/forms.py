@@ -11,5 +11,5 @@ class CommentForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'نظر خود را بنویسید...',
                 'rows': 4
-            }),            
+            }),
         }

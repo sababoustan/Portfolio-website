@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from .models import Cart, Wishlist, Product
-from .services import (AddToCartService, 
-                       UpdateCartItemService, 
+from .services import (AddToCartService,
+                       UpdateCartItemService,
                        ApplyCouponService)
 # Create your views here.
 
@@ -26,7 +26,7 @@ class CartMixin:
                 )
 
             return cart
-        
+
         if not request.session.session_key:
             request.session.create()
 
@@ -45,7 +45,7 @@ class CartMixin:
 
 class CartView(CartMixin, View):
     template_name = "cart/shop-cart.html"
-    
+
     def get(self, request):
         cart = self.get_cart()
         context = {
@@ -56,8 +56,8 @@ class CartView(CartMixin, View):
             'final_price': cart.get_final_price()
         }
         return render(request, self.template_name, context)
-    
-    
+
+
 class AddToCartView(CartMixin, View):
     def post(self, request, product_id):
         cart = self.get_cart()
@@ -77,7 +77,7 @@ class AddToCartView(CartMixin, View):
             "status": "added",
             "cart_count": cart_count
         })
-    
+
 
 class RemoveItemView(CartMixin, View):
     def post(self, product_id):
@@ -93,8 +93,8 @@ class RemoveItemView(CartMixin, View):
             item.delete()
         cart.update_total_price()
         return redirect("cart:cart_view")
-   
-    
+
+
 class UpdateCartAjaxView(CartMixin, View):
     def post(self, request):
         product_id = request.POST.get("product_id")
@@ -117,14 +117,14 @@ class UpdateCartAjaxView(CartMixin, View):
             return JsonResponse({"error": "Invalid request"}, status=400)
 
         return JsonResponse(data)
-    
-          
+
+
 class ApplyCouponView(CartMixin, View):
     def post(self, request):
         cart = self.get_cart()
         code = request.POST.get("code")
         try:
-            ApplyCouponService.apply(cart, code)
+            ApplyCouponService.apply(code, cart)
             messages.success(request, "کد تخفیف با موفقیت اعمال شد.")
         except ValueError as e:
             if str(e) == "EMPTY_CODE":
@@ -134,15 +134,15 @@ class ApplyCouponView(CartMixin, View):
             elif str(e) == "CONDITION_NOT_MET":
                 messages.error(request, "شرایط اعمال کد تخفیف رعایت نشده است.")
 
-        return redirect("cart:cart_view") 
-    
-    
+        return redirect("cart:cart_view")
+
+
 class WishlistListView(View):
     def get(self, request):
         items = Wishlist.objects.filter(user=request.user)
         return render(request, "cart/shop-wishlist.html", {"items": items})
-    
-    
+
+
 class WishlistToggleView(View):
     def post(self, request, product_id):
         if not request.user.is_authenticated:
@@ -173,4 +173,3 @@ class WishlistToggleView(View):
             "status": status,
             "wishlist_count": wishlist_count
         })
-        

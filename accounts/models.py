@@ -14,13 +14,13 @@ class User(AbstractUser):
 
     def __str__(self):
         return f"{self.username or self.email}"
-    
+
     class Meta:
         verbose_name = 'کاربر'
         verbose_name_plural = 'کاربران'
         ordering = ['-date_joined']    
-     
-        
+
+
 class Address(models.Model):
     user = models.ForeignKey(
         User,
@@ -36,10 +36,10 @@ class Address(models.Model):
                                    verbose_name='کدپستی')
     phone_number = models.CharField(max_length=11, blank=False,
                                   verbose_name='شماره تماس')
-    
+
     def __str__(self):
-        return f"{self.city}-{self.street_address}"
-    
+        return f"{self.city}-{self.street_address}-{self.full_name}"
+
     class Meta:
         verbose_name = 'آدرس'
         verbose_name_plural = 'آدرس‌ها'

@@ -19,7 +19,7 @@ class Order(models.Model):
         Failed = ('Failed', 'پرداخت ناموفق')
     
     user = models.ForeignKey(
-        User, 
+        User,
         on_delete=models.CASCADE,
         related_name='order',
         verbose_name='کاربر')
@@ -28,16 +28,16 @@ class Order(models.Model):
             on_delete=models.CASCADE,
             related_name='cart',
             verbose_name='سبدخرید'
-        ) 
+        )
     address = models.ForeignKey(
             Address,
             on_delete=models.CASCADE,
             related_name='address',
             verbose_name='آدرس'
         )
-    status = models.CharField(max_length=50, choices=status_order.choices, 
-                               default=status_order.Default, verbose_name=
-                               'وضعیت پرداخت')
+    status = models.CharField(max_length=50, choices=status_order.choices,
+                               default=status_order.Default, 
+                               verbose_name='وضعیت پرداخت')
     created_at = models.DateTimeField(default=timezone.now,
                                       verbose_name='تاریخ ثبت سفارش')
     payment_tracking_code = models.CharField(max_length=100, null=True,
@@ -49,16 +49,16 @@ class Order(models.Model):
 
     def get_total_price(self):
         return self.cart.get_final_price()   
-    
+
     def save(self, *args, **kwargs):
         self.total_price = self.get_total_price()
         super().save(*args, **kwargs)
-    
+
     class Meta:
         verbose_name = 'وضعیت سفارش'
         verbose_name_plural = 'وضعیت سفارش ها'
         ordering = ['-created_at']
-        
+
     def __str__(self):
         return f"{self.user}-{self.authority}"
 
@@ -78,10 +78,10 @@ class OrderItem(models.Model):
     )
     quantity = models.PositiveIntegerField(default=1)
     total_price = models.PositiveIntegerField()
-    
+
     class Meta:
         verbose_name = 'ایتم سفارش'
         verbose_name_plural = 'ایتم های سفارش'
-        
+
     def __str__(self):
         return f"{self.product.title} - {self.quantity} عدد"

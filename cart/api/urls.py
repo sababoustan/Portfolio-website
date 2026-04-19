@@ -17,5 +17,6 @@ urlpatterns = [
     path("cart/update/", UpdateCartAPI.as_view(), name="cart-update"),
     path("cart/coupon/", CouponAPI.as_view(), name="coupon"),
     path("wishlist/", WishlistAPI.as_view(), name="wishlist"),
-    path("wishlist/toggle/<int:product_id>/", WishlistToggleAPIView.as_view(), name="wishlist"),
+    path("wishlist/toggle/<int:product_id>/", WishlistToggleAPIView.as_view(),
+         name="wishlist"),
 ]

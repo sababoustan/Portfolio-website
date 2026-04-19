@@ -19,18 +19,18 @@ from rest_framework.response import Response
 
 class CartAPI(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         cart = get_object_or_404(Cart, user=request.user)
         serializer = CartSerializer(cart)
         return Response(serializer.data)
-    
-    
+
+
 class CartItemAPI(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def delete(self, request, item_id):
-        
+
         item = get_object_or_404(
             CartItem,
             id=item_id,
@@ -40,12 +40,12 @@ class CartItemAPI(APIView):
         item.delete()
         cart.refresh_from_db()
         return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
-    
-    
+
+
 class AddToCartAPI(GenericAPIView):
     serializer_class = AddToCartInputSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_cart(self, request):
         if request.user.is_authenticated:
             cart, _ = Cart.objects.get_or_create(
@@ -53,10 +53,10 @@ class AddToCartAPI(GenericAPIView):
                 status=Cart.Status.DRAFT
             )
             return cart
-        
+
         if not request.session.session_key:
             request.session.create()
-            
+
         cart, _ = Cart.objects.get_or_create(
             user=request.user,
             status=Cart.Status.DRAFT
@@ -88,26 +88,26 @@ class AddToCartAPI(GenericAPIView):
             )
             cart.refresh_from_db()
         return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
-    
-    
+
+
 class UpdateCartAPI(APIView):
     serializer_class = CartActionSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_cart(self, request):
         cart, _ = Cart.objects.get_or_create(
                 user=request.user,
                 status=Cart.Status.DRAFT
             )
         return cart
-    
+
     def update_item(self, action, cart, product_id):
         product = get_object_or_404(Product, id=product_id)
         item = cart.items.filter(product_id=product.id).first()
         if not item:
             raise ValidationError({"detail": "Item not found"})
-        removed = False 
-        
+        removed = False
+
         if action == "increase":
             if item.quantity >= item.product.stock:
                 raise ValidationError({
@@ -134,7 +134,7 @@ class UpdateCartAPI(APIView):
             "final_total": cart.get_final_price(),
             "cart_count": cart.get_total_quantity(),
         }
-        
+
     def post(self, request):
         inp = self.serializer_class(data=request.data)
         inp.is_valid(raise_exception=True)
@@ -147,19 +147,19 @@ class UpdateCartAPI(APIView):
             action=action
         )
         return Response(data, status=status.HTTP_200_OK)
-            
-    
+
+
 class CouponAPI(APIView):
     serializer_class = CouponSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_cart(self, request):
         cart, _ = Cart.objects.get_or_create(
                 user=request.user,
                 status=Cart.Status.DRAFT
             )
         return cart
-    
+
     def apply(self, cart, code):
         if not code:
             raise ValueError("EMPTY CODE")
@@ -172,7 +172,7 @@ class CouponAPI(APIView):
         if discount == 0:
             raise ValueError("CONDITION_NOT_MET")
         return discount
-        
+
     def post(self, request):
         cart = self.get_cart(request=request)
         inp = self.serializer_class(data=request.data)
@@ -214,10 +214,10 @@ class CouponAPI(APIView):
             status=status.HTTP_200_OK
         )
 
-        
+
 class WishlistAPI(APIView):
     permission_classes = [IsAuthenticated]
-        
+
     def get(self, request):
         wishlists = Wishlist.objects.filter(user=request.user)
         serializer = WishListSerializer(wishlists, many=True)
@@ -227,7 +227,7 @@ class WishlistAPI(APIView):
 class WishlistToggleAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
         wishlist_item = Wishlist.objects.filter(
@@ -240,9 +240,9 @@ class WishlistToggleAPIView(APIView):
         else:
             Wishlist.objects.create(
                 user=request.user,
-            product=product
+                product=product
             )
-            status="added"
+            status = "added"
         wishlist_count = Wishlist.objects.filter(user=request.user,).count()
         return Response({
             "status": status,

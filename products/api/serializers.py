@@ -18,14 +18,16 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             "category",
             "discount_price"
             ]
-        
-        
+
+
 class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Comment
         fields = [
-            "id", 
-            "user", 
-            "body", 
+            "id",
+            "user",
+            "body",
             "created_at"
             ]

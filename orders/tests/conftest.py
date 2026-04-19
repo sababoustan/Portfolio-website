@@ -35,6 +35,7 @@ def product(db, category):
         category=category
     )
 
+
 @pytest.fixture
 def cart(db, user):
     return Cart.objects.create(user=user)
@@ -61,14 +62,13 @@ def order(db, user, cart, address):
         status=Order.status_order.Default,
         total_price=100_000
     )
-    
+
 
 @pytest.fixture
 def order_item(db, order, product):
     return OrderItem.objects.create(
         order=order,
         product=product,
-        quantity=2,         
+        quantity=2,
         total_price=100_000
     )
-

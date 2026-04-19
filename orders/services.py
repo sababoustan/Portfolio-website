@@ -3,8 +3,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 import uuid
 import requests
-from .models import Order
-from .models import Order, OrderItem
+from orders.models import Order, OrderItem
 
 MERCHANT = "zibal"
 ZIBAL_REQUEST = "https://gateway.zibal.ir/v1/request"
@@ -87,5 +86,3 @@ def verify_and_pay_order(order, track_id):
         order.cart.items.all().delete()
 
     return order
-
-

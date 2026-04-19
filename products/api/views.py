@@ -33,31 +33,31 @@ class ProductDetailAPI(RetrieveDestroyAPIView):
     serializer_class = ProductDetailSerializer
     lookup_field = "slug"
     permission_classes = [IsAdminOrReadOnly]
-    
+
 
 class ProductCommentAPI(ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    
+
     def get_queryset(self):
         return Comment.objects.filter(
             product__slug=self.kwargs["slug"],
             is_active=True,
             parent__isnull=True
         )
-    
+
     def perform_create(self, serializer):
         product = get_object_or_404(Product, slug=self.kwargs["slug"])
         serializer.save(
             user=self.request.user,
             product=product,
-            is_active=False  
+            is_active=False
         )
-        
-        
+
+
 class ProductSearchAPI(ListAPIView):
     serializer_class = ProductDetailSerializer
-    
+
     def get_queryset(self):
         search = self.request.query_params.get('search', '').strip()
         qs = Product.objects.filter(is_active=True)
@@ -68,6 +68,3 @@ class ProductSearchAPI(ListAPIView):
                 Q(slug__icontains=search)
             )
         return qs
-
-    
-    

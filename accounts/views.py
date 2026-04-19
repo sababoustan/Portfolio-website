@@ -55,15 +55,15 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect("main:home")
-        
-        
+
+
 class RegisterView(View):
     def get(self, request):
         return render(request, "accounts/shop-customer-login.html", {
             "login_form": LoginForm(),
             "register_form": RegisterForm(),
         })
-    
+
     def post(self, request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
@@ -72,12 +72,12 @@ class RegisterView(View):
             user.save()
             messages.success(request, "ثبت نام با موفقطیت  انجام شد")
             return redirect("main:home")
-        
+
         return render(request, "accounts/shop-customer-login.html", {
             "login_form": LoginForm(),
             "register_form": RegisterForm(),
         })
-        
+
 
 class CheckoutView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
@@ -97,18 +97,18 @@ class CheckoutView(LoginRequiredMixin, View):
             'form': form,
             'items': items,
             'final_price': final_price,
-            
+
             }
-            return render(request, "accounts/address_checkout.html",context)
-        
+            return render(request, "accounts/address_checkout.html", context)
+
         address_form = AddressForm()
-        return render(request, "accounts/address_checkout.html", 
+        return render(request, "accounts/address_checkout.html",
                       {"form": address_form}
                       )
 
     def post(self, request):
         form = AddressForm(request.POST)
-        if form .is_valid():
+        if form.is_valid():
             address = form.save(commit=False)
             address.user = request.user
             address.save()
@@ -147,5 +147,3 @@ class ConfirmOrderView(View):
                 'items': items,
             }
             return render(request, "orders/preview_order.html", context)
-        
-        

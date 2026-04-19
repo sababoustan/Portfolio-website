@@ -12,5 +12,3 @@ def user_login(sender, user, request, **kwargs):
     if cart:
         cart.user = user
         cart.save()
-
-        

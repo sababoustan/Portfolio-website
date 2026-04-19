@@ -11,7 +11,5 @@ urlpatterns = [
     path("checkout/", CheckoutView.as_view(), name="checkout"),
     path("register/", RegisterView.as_view(), name="register"),
     path("confirmorder/", ConfirmOrderView.as_view(), name="confirm_order"),
-    
-
 
 ]

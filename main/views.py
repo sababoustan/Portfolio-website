@@ -21,7 +21,6 @@ class HomeView(ListView):
 
         queryset = self.get_queryset()
 
-        # --- pagination ---
         try:
             page_number = int(self.request.GET.get("page", 1))
         except ValueError:
@@ -46,7 +45,6 @@ class HomeView(ListView):
         context["has_previous"] = page_number > 1
         context["has_next"] = page_number < total_pages
 
-        # --- wishlist ---
         if self.request.user.is_authenticated:
             context["wishlist_ids"] = Wishlist.objects.filter(
                 user=self.request.user

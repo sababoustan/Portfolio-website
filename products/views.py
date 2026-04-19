@@ -13,13 +13,13 @@ class ProductDetailView(DetailView):
     context_object_name = "product"
     slug_field = "slug"
     slug_url_kwarg = "slug"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = context["object"]
         comments = Comment.objects.filter(
-            product=product, 
-            is_active=True, 
+            product=product,
+            is_active=True,
             parent__isnull=True
             )
         comment_form = CommentForm()
@@ -28,7 +28,7 @@ class ProductDetailView(DetailView):
             "comment_form": comment_form
             })
         return context
-    
+
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect("accounts:login")
@@ -44,13 +44,13 @@ class ProductDetailView(DetailView):
             "کامنت شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد"
             )
         return redirect(request.path)
-        
+
 
 class ProductSearchView(ListView):
     template_name = "products/search.html"
     model = Product
     context_object_name = "products"
-    
+
     def get_queryset(self):
         search = self.request.GET.get('search', '').strip()
         qs = Product.objects.filter(is_active=True)
@@ -61,4 +61,3 @@ class ProductSearchView(ListView):
                 Q(slug__icontains=search)
             )
         return qs
-            
