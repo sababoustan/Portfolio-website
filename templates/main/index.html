@@ -80,43 +80,16 @@
 	=============================================-->
 
   <div class="hover-banner-area mb-70 mb-md-50 mb-sm-30">
-    <div class="container wide">
-      <div class="row">
-        <div class="col-lg-4 col-md-6 mb-30">
-          <!--=======  single banner  =======-->
+      <section class="recommended-products">
+          <div class="container">
 
-          <div class="single-banner single-banner--hoverborder">
-            <a class="banner-link" ></a>
-            <img src="{% static 'assets/images/electronics-two/banner-1.png' %}" class="img-fluid" alt="">
+              <h2 class="rec-title">محصولات پیشنهادی</h2>
 
-          </div>
-
-          <!--=======  End of single banner  =======-->
-        </div>
-        <div class="col-lg-4 col-md-6 mb-30">
-          <!--=======  single banner  =======-->
-
-          <div class="single-banner single-banner--hoverborder">
-            <a class="banner-link" ></a>
-            <img src="{% static 'assets/images/electronics-two/banner-2.png' %}" class="img-fluid" alt="">
+              <div id="recommended-products" class="product-grid">
+              </div>
 
           </div>
-
-          <!--=======  End of single banner  =======-->
-        </div>
-        <div class="col-lg-4 col-md-6 mb-30">
-          <!--=======  single banner  =======-->
-
-          <div class="single-banner single-banner--hoverborder">
-            <a class="banner-link" ></a>
-            <img src="{% static 'assets/images/electronics-two/banner3.png' %}" class="img-fluid-3" alt="">
-
-          </div>
-
-          <!--=======  End of single banner  =======-->
-        </div>
-      </div>
-    </div>
+      </section>
   </div>
 
   <!--=====  End of hover banner area  ======-->
@@ -146,49 +119,58 @@
           <div class="tab-content" id="nav-tabContent2">
             <div class="tab-pane fade show active" id="product-series-1" role="tabpanel"
               aria-labelledby="product-tab-1">
-              <div class="row">
-                {% for product in products%}
-                <!--=======  single product  =======-->
-                <div class="col-12 col-lg-3 col-md-6 col-sm-6 mb-45">
-                  <div class="single-product">
-                    <!--=======  single product image  =======-->
-                          <div class="single-product__image">
-                            <a class="image-wrap" href="{% url 'products:detail' product.slug %}">
-                              <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.title }}">
-                            </a>
-                          
-                          <div class="single-product__floating-icons">
+              <div class="row" id="product-container">
+                <script>
+                async function loadProducts() {
+                    const products = await fetch("/api/products/").then(res => res.json());
 
-                              <span class="wishlist">
-                                <div class="single-icon wishlist">
-                                  <a href="#" class="add-to-wishlist" data-product="{{ product.id }}">
-                                      <i class="ion-heart {% if product.id in wishlist_ids %}active{% endif %}"></i>
-                                  </a>
+                    const wishlist = await fetch("/api/wishlist/").then(res => res.json());
 
+                    const wishlistIds = wishlist.map(item => item.product);
+
+                    const container = document.getElementById("product-container");
+                    container.innerHTML = "";
+
+                    products.forEach(product => {
+                        const isActive = wishlistIds.includes(product.id) ? "active" : "";
+
+                        container.innerHTML += `
+                            <div class="col-12 col-lg-3 col-md-6 col-sm-6 mb-45">
+                                <div class="single-product">
+                                    <div class="single-product__image">
+                                        <a class="image-wrap" href="/products/${product.slug}/">
+                                            <img src="${product.image}" class="img-fluid" alt="${product.title}">
+                                        </a>
+                                        <div class="single-product__floating-icons">
+                                            <span class="wishlist">
+                                                <div class="single-icon wishlist">
+                                                    <a href="#" class="add-to-wishlist" data-product="${product.id}">
+                                                        <i class="ion-heart ${isActive}"></i>
+                                                    </a>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="single-product__content">
+                                        <h4 class="product-title">
+                                            <a href="/products/detail/${product.slug}">${product.title}</a>
+                                        </h4>
+                                        ${product.discount_price
+                                            ? `
+                                                <p style="text-decoration: line-through; color:#888;">${product.price} تومان</p>
+                                                <p style="color: red; font-weight: bold;">${product.discount_price} تومان</p>
+                                              `
+                                            : `<p>${product.price} تومان</p>`
+                                        }
+                                    </div>
                                 </div>
-                            </span>
-                              </div>
-                          </div>
+                            </div>
+                        `;
+                    });
+                }
 
-                          <div class="single-product__content">
-                            <h4 class="product-title">
-                                <a href="{% url 'products:detail' product.slug %}">{{ product.title }}</a>
-                            </h4>
-                            {% if product.discount_price %}
-                                <p style="text-decoration: line-through; color:#888;">
-                                    {{ product.price }} تومان
-                                </p>
-                                <p style="color: red; font-weight: bold;">
-                                    {{ product.discount_price }} تومان
-                                </p>
-                            {% else %}
-                                <p>{{ product.price }} تومان</p>
-                            {% endif %}
-                          </div>
-                        </div>
-                  </div>
-                  {% endfor %}
-                   </div>  
+                loadProducts();
+                </script>
                     <div class="pagination-wrapper">
                       <ul class="pagination">
 

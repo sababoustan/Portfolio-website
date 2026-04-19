@@ -28,16 +28,6 @@
 
           <div class="header-top-right">
             <!--=======  top shop sropdown =======-->
-
-            <!--=======  top social icons  =======-->
-
-            <div class="top-social-icons">
-              <ul>
-                <li><a href="//www.instagram.com"><i class="fa fa-instagram"></i></a></li>
-              </ul>
-            </div>
-
-            <!--=======  End of top social icons  =======-->
           </div>
 
           <!--=======  End of header top right  =======-->
@@ -112,30 +102,30 @@
               </div>
 
               <!--=======  End of single-icon  =======-->
-              <!--=======  single-icon  =======-->
+              <!--=======  single-icon user-menu  =======-->
 
-             <div class="single-icon user-login">
-                {% if user.is_authenticated %}
-                    <span class="user-name">{{ user.username }}</span>
-                    <a href="{% url 'accounts:logout' %}">
-                        <i class="ion-android-person"></i>
-                    </a>
-                {% else %}
-                    <a href="{% url 'accounts:login' %}">
-                        <i class="ion-android-person"></i>
-                    </a>
-                {% endif %}
-            </div>
+              <div class="single-icon user-menu">
 
+              {% if user.is_authenticated %}
 
-              <!--=======  End of single-icon  =======-->
+              <a href="#" class="user-icon">
+              <i class="ion-android-person"></i>
+              </a>
 
-              <div class="single-icon user-logout">
-                  <a href="{% url 'accounts:logout' %}">
-                      <i class="ion-log-out"></i>
-                  </a>
+              <div class="user-dropdown">
+              <a href="{% url 'accounts:profile' %}">پروفایل</a>
+              <a href="{% url 'accounts:logout' %}">خروج از حساب</a>
               </div>
 
+              {% else %}
+
+              <a href="{% url 'accounts:login' %}">
+              <i class="ion-android-person"></i>
+              </a>
+
+              {% endif %}
+
+              </div>
 
               <!--=======  single-icon  =======-->
 
@@ -177,4 +167,18 @@
     <!--=======  End of header bottom  =======-->
 
   </header>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("/api/wishlist/")
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.items) {
+                document.getElementById("wishlist-count").textContent = data.items.length;
+            }
+        })
+        .catch(error => console.log("Wishlist API error:", error));
+});
+</script>
+
 

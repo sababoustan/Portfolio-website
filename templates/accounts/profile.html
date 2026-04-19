@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_filters %}
+{% block title %}پروفایل{% endblock %}
+
+{% block content %}
+<body>
+	<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-30">
+        <div class="col-lg-12">
+                <h1 class="breadcrumb-title">پروفایل</h1>
+
+                <ul class="breadcrumb-list">
+                    <li class="breadcrumb-list__item"><a href="{%url 'main:home'%}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-list__item breadcrumb-list__item--active">پروفایل</li>
+                </ul>
+
+            </div>
+	</div>
+        <div class="profile-container">
+    <div class="profile-card">
+        <h3>اطلاعات کاربر</h3>
+        <p>نام کاربری: <span id="username"></span></p>
+        <p>ایمیل: <span id="email"></span></p>
+    </div>
+
+    <div class="address-card">
+        <h3>آدرس ها</h3>
+        <div id="addresses"></div>
+    </div>
+
+</div>
+
+
+
+<script>
+fetch("/api/profile/", {
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    }
+})
+.then(response => response.json())
+.then(data => {
+    document.getElementById("username").innerText = data.user.username
+    document.getElementById("email").innerText = data.user.email
+})
+</script>
+<script>
+fetch("/api/accounts/checkout/")
+.then(response => response.json())
+.then(data => {
+
+    let html = "";
+
+    data.addresses.forEach(addr => {
+        html += `
+        <div class="address-box">
+            <p><strong>شهر:</strong> ${addr.city}</p>
+            <p><strong>آدرس:</strong> ${addr.street_address}</p>
+            <p><strong>کد پستی:</strong> ${addr.postal_code}</p>
+        </div>
+        `;
+    });
+
+    document.getElementById("addresses").innerHTML = html;
+});
+</script>
+
+
+</body>
+{% endblock %}

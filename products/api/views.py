@@ -1,11 +1,12 @@
 from rest_framework.generics import (
-                                RetrieveDestroyAPIView, 
-                                ListCreateAPIView, 
+                                RetrieveDestroyAPIView,
+                                ListCreateAPIView,
                                 ListAPIView
                                 )
 from rest_framework.permissions import (
                                 IsAuthenticatedOrReadOnly,
                                 BasePermission,
+                                IsAuthenticated,
                                 SAFE_METHODS,
                             )
 from django.db.models import Q
@@ -13,6 +14,8 @@ from django.shortcuts import get_object_or_404
 from products.api.serializers import ProductDetailSerializer, CommentSerializer
 from products.models import Product
 from comments.models import Comment
+from orders.models import OrderItem
+from cart.models import Wishlist
 
 
 class IsAdminOrReadOnly(BasePermission):
@@ -20,14 +23,14 @@ class IsAdminOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return bool(request.user and request.user.is_staff)
-
+    
 
 class ProductListAPI(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
     permission_classes = [IsAdminOrReadOnly]
-
-
+    
+    
 class ProductDetailAPI(RetrieveDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
@@ -68,3 +71,31 @@ class ProductSearchAPI(ListAPIView):
                 Q(slug__icontains=search)
             )
         return qs
+    
+    
+class RecommendationProductAPI(ListAPIView):
+    serializer_class = ProductDetailSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        order_product_ids = OrderItem.objects.filter(
+            order__user=self.request.user
+        ).values_list('product_id', flat=True)
+
+        wishlist_product_ids = Wishlist.objects.filter(
+            user=self.request.user
+        ).values_list('product_id', flat=True)
+        
+        product_ids = order_product_ids.union(wishlist_product_ids)
+        category_id = Product.objects.filter(
+            id__in=product_ids
+            ).values_list('category_id', flat=True).distinct()
+
+        return Product.objects.filter(
+            category_id__in=category_id
+            ).exclude(
+                id__in=product_ids
+                )[:10]
+
+    
