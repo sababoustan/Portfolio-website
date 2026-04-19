@@ -1,6 +1,4 @@
-// ----------------------------------
-// Get CSRF Token
-// ----------------------------------
+// ---------- Get CSRF Token ----------
 function getCookie(name) {
     let cookieValue = null;
     const cookies = document.cookie.split(';');
