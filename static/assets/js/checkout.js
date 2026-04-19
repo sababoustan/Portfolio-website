@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const radios = document.querySelectorAll(".address-radio");
     const btn = document.getElementById("continue-btn");
-
+    if (!btn) return;
     function toggleButton() {
         const checked = document.querySelector(".address-radio:checked");
         btn.disabled = !checked;

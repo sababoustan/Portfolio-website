@@ -41,84 +41,94 @@
 	<!--=============================================
     =            shop page content         =
     =============================================-->
+    <script>
+        const PRODUCT_SLUG = "{{ product.slug }}";
+    </script>
+    <script>
+        console.log("slug from template =", PRODUCT_SLUG);
+    </script>
 
-	<div class="container mt-100 mb-100">
-    <div class="row">
 
-        <!--==================  ستون تصویر  ==================-->
-        <div class="col-lg-6 mb-30">
-            <div class="single-image">
-                <img src="{{ product.image.url }}" class="product-main-img">
+    <div class="container mt-100 mb-100">
+        <div class="row">
+
+            <!--==================  ستون تصویر  ==================-->
+            <div class="col-lg-6 mb-30">
+                <div class="single-image">
+                    <img id="product-image" class="product-main-img">
+                </div>
             </div>
+
+            <!--==================  ستون اطلاعات  ==================-->
+            <div class="col-lg-6">
+
+                <div class="shop-product__title_mb-15">
+                    <h2 id="product-title"></h2>
+                </div>
+                <div class="product-price">
+                <div class="product-price" id="product-price"></div>
+                </div>
+                <div class="shop-product__short-desc mb-50">
+                    <div class="shop-product__block__title">توضیحات:</div>
+                    <div id="product-description"></div>
+                </div>
+
+                <div class="shop-product__block__title">موجودی:</div>
+                <div class="shop-product__block__value" id="product-stock"></div>
+
+                <div class="quick-view-other-info pb-0">
+                    <div class="shop-product__block__title">کدمحصول:</div>
+                    <table>
+                        <td class="quickview-value" id="product-sku"></td>
+                    </table>
+                </div>
+
+                <br>
+
+                <div class="add-to-cart-box">
+
+                    <div style="display:flex; align-items:center; gap:10px;">
+
+                        <button type="button" class="qty-btn-product"
+                                data-action="minus"
+                                data-product="">
+                            -
+                        </button>
+
+                        <input
+                            type="number"
+                            id="qty-input"
+                            name="quantity"
+                            value="1"
+                            min="1"
+                            data-stock=""
+                            readonly
+                            style="width:50px; text-align:center;"
+                        >
+
+                        <button type="button" class="qty-btn-product"
+                                data-action="plus"
+                                data-product="">
+                            +
+                        </button>
+                    </div>
+
+                    <div id="qty-error" style="color:red; margin-top:6px; display:none;"></div>
+
+                    <br>
+
+                    <button type="button"
+                            class="add-to-cart-btn"
+                            data-product="">
+                        افزودن به سبد خرید
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
-
-        <!--==================  ستون اطلاعات  ==================-->
-        <div class="col-lg-6">
-
-            <div class="shop-product__title_mb-15">
-                <h2>{{ product.title }}</h2>
-            </div>
-					<div class="product-price">
-						{% if product.discount_price %}
-							<span class="old-price">{{ product.price }} تومان</span>
-							<span class="new-price">{{ product.discount_price }} تومان</span>
-						{% else %}
-							<span class="new-price">{{ product.price }} تومان</span>
-						{% endif %}
-					</div>
-
-            <div class="shop-product__short-desc mb-50">
-				<div class="shop-product__block__title">توضیحات:</div>
-                {{ product.description }}
-            </div>
-
-            <div class="shop-product__block__title">موجودی:</div>
-            <div class="shop-product__block__value">{{ product.stock }}</div>
-
-            <div class="quick-view-other-info pb-0">
-				<div class="shop-product__block__title">کدمحصول:</div>
-                <table>
-                    <td class="quickview-value">{{ product.sku }}</td>
-                </table>
-            </div>
-
-            <br>
-
-           <div class="add-to-cart-box">
-
-					<div style="display:flex; align-items:center; gap:10px;">
-						<button type="button" class="qty-btn-product" data-action="minus" data-product="{{ product.id }}">-</button>
-
-						<input
-							type="number"
-							id="qty-input"
-							name="quantity"
-							value="1"
-							min="1"
-							data-stock="{{ product.stock }}"
-							readonly
-							style="width:50px; text-align:center;"
-						>
-
-						<button type="button" class="qty-btn-product" data-action="plus" data-product="{{ product.id }}">+</button>
-					</div>
-
-					<div id="qty-error" style="color:red; margin-top:6px; display:none;"></div>
-
-					<br>
-
-					<button type="button"
-							class="add-to-cart-btn"
-							data-product="{{ product.id }}">
-						افزودن به سبد خرید
-					</button>
-
-				</div>
-
-        </div>
-
     </div>
-</div>
 
 			<!--=======  End of other info table  =======-->
 {# ==================== COMMENTS SECTION ==================== #}

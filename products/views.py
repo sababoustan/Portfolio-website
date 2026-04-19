@@ -1,6 +1,6 @@
 from .models import Product
-from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView
+from django.shortcuts import redirect, render
+from django.views.generic import ListView, DetailView, TemplateView
 from django.db.models import Q
 from django.contrib import messages
 from comments.models import Comment
@@ -61,3 +61,12 @@ class ProductSearchView(ListView):
                 Q(slug__icontains=search)
             )
         return qs
+    
+    
+class ProductPageView(TemplateView):
+    template_name = "products/shop-product-basic.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["slug"] = self.kwargs["slug"]
+        return context
