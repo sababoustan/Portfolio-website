@@ -225,7 +225,6 @@ class WishlistAPI(APIView):
 
 
 class WishlistToggleAPIView(APIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, product_id):

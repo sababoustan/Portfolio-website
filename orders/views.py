@@ -19,7 +19,7 @@ class PaymentRequestView(View):
         order_note = request.POST.get("order_note")
         total_price = final_price + shipping_cost
         cart = Cart.objects.filter(user=user).first()
-        address = get_object_or_404(Address, id=address_id, user=user)        
+        address = get_object_or_404(Address, id=address_id, user=user)
         order = create_order(
             user=user,
             cart=cart,

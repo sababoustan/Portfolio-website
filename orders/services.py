@@ -8,7 +8,6 @@ from orders.models import Order, OrderItem
 MERCHANT = "zibal"
 ZIBAL_REQUEST = "https://gateway.zibal.ir/v1/request"
 ZIBAL_VERIFY = "https://gateway.zibal.ir/v1/verify"
-ZIBAL_STARTPAY = "https://gateway.zibal.ir/start/"
 
 
 def create_order(user, cart, address, total_price, order_note):
@@ -17,7 +16,7 @@ def create_order(user, cart, address, total_price, order_note):
             user=user,
             cart=cart,
             address=address,
-            total_price=total_price, 
+            total_price=total_price,
             status=Order.status_order.PendingPayment,
             authority=authority,
             order_note=order_note
