@@ -10,12 +10,15 @@ from rest_framework.permissions import (
                                 SAFE_METHODS,
                             )
 from django.db.models import Q
+from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from products.api.serializers import ProductDetailSerializer, CommentSerializer
 from products.models import Product
 from comments.models import Comment
 from orders.models import OrderItem
 from cart.models import Wishlist
+from django.core.cache import cache
+from django.conf import settings
 
 
 class IsAdminOrReadOnly(BasePermission):
@@ -30,12 +33,40 @@ class ProductListAPI(ListCreateAPIView):
     serializer_class = ProductDetailSerializer
     permission_classes = [IsAdminOrReadOnly]
     
+    def get(self, request, *args, **kwargs):
+        cache_key = "product_list"
+        products = cache.get(cache_key)
+        if products is None:
+            queryset = self.get_queryset()
+            serializer = self.serializer_class(queryset, many=True)
+            products = serializer.data
+            cache.set(cache_key, products, timeout=settings.CACHE_TTL)
+        
+        return Response(products)
+    
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        cache.delete("product_list")
+        return response
+
     
 class ProductDetailAPI(RetrieveDestroyAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
     lookup_field = "slug"
+    serializer_class = ProductDetailSerializer
     permission_classes = [IsAdminOrReadOnly]
+    
+    def get(self, request, *args, **kwargs):
+        slug = self.kwargs.get('slug')
+        cache_key = f"detail_product_{slug}"
+        product = cache.get(cache_key)
+        if product is None:
+            product_obj = self.get_object()
+            serializer = self.serializer_class(product_obj)
+            product = serializer.data
+            cache.set(cache_key, product, timeout=settings.CACHE_TTL)
+                    
+        return Response(product)
 
 
 class ProductCommentAPI(ListCreateAPIView):
