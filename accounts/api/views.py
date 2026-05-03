@@ -161,7 +161,7 @@ class ConfirmOrderAPI(APIView):
             .first()
         )
         if not cart:
-            return Response({"message": "The shopping cart is empty."}, 
+            return Response({"message": "The shopping cart is empty."},
                             status=status.HTTP_400_BAD_REQUEST)
 
         items = cart.items.all()
@@ -185,10 +185,9 @@ class ConfirmOrderAPI(APIView):
 
 class ProfileAPI(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response({
             "user": serializer.data,
         })
-        

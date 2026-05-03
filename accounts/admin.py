@@ -6,8 +6,8 @@ from .models import User, Address
 class AddressInline(admin.TabularInline):
     search_fields = ["user__username", "full_name", "city", "street_address"]
     model = Address
-    
-    
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'email', 'date_joined']

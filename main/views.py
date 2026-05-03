@@ -1,8 +1,5 @@
 from django.shortcuts import render
 import polars as pl
-from django.conf import settings
-import numpy
-import os
 import matplotlib.pyplot as plt
 import matplotlib
 from django.views.generic import ListView
@@ -63,7 +60,7 @@ class HomeView(ListView):
             context["wishlist_ids"] = []
 
         return context
-    
+
 
 def dashboard_view(request):
     orders = list(Order.objects.filter(status=Order.status_order.Paid).values())
@@ -94,8 +91,8 @@ def dashboard_view(request):
         df_items.group_by("product_id")
         .agg(pl.col("quantity").sum().alias("sales_volume"))
         .sort("sales_volume", descending=True)
-        )   
-    
+        )
+
     df_products_stock = df_products.select(["title", "stock"])
     df_products_sales = (
         df_products_sales
@@ -114,7 +111,7 @@ def dashboard_view(request):
     sales_volume_list = df_products_sales["sales_volume"].to_list()
     product_list = df_products_stock["title"].to_list()
     stock_product_list = df_products_stock["stock"].to_list()
-    
+
     plt.figure(figsize=(10, 5))
     plt.plot(monthly_list, sales_list_monthly, marker="o")
     plt.title("Monthly Sales")
@@ -122,7 +119,7 @@ def dashboard_view(request):
     plt.ylabel("Sales")
     plt.savefig("media/charts/monthly_sales.png")
     plt.close()
-    
+
     plt.figure(figsize=(10, 5))
     plt.plot(daily_list, sales_list_daily, marker="s")
     plt.title("Daily sales")
@@ -130,7 +127,7 @@ def dashboard_view(request):
     plt.ylabel("Sales")
     plt.savefig("media/charts/daily_sales.png")
     plt.close()
-    
+
     plt.figure(figsize=(14, 6))
     plt.bar(titles, sales_volume_list, color="#1f77b4")
     plt.title("Best Selling Products")
@@ -140,7 +137,7 @@ def dashboard_view(request):
     plt.tight_layout()
     plt.savefig("media/charts/best_selling.png")
     plt.close()
-    
+
     plt.figure(figsize=(10, 5))
     plt.bar(product_list, stock_product_list, color="steelblue")
     plt.xlabel("Product")
@@ -150,8 +147,5 @@ def dashboard_view(request):
     plt.tight_layout()
     plt.savefig("media/charts/stock_levels.png")
     plt.close()
-    
+
     return render(request, "dashboard.html")
-    
-    
-    

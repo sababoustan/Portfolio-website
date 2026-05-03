@@ -13,18 +13,18 @@ class Coupon(models.Model):
 
     discount_type = models.CharField(default=Discount_type.PERCENT,
                                      max_length=2, 
-                                     choices=Discount_type.choices, 
+                                     choices=Discount_type.choices,
                                      verbose_name='نوع تخفیف')    
     code = models.CharField(max_length=100, verbose_name='کدتخفیف')
     discount_amount = models.DecimalField(default=0, max_digits=10,
-                                          decimal_places=0, 
+                                          decimal_places=0,
                                           verbose_name='مقدار تخفیف')
-    min_order_amount = models.DecimalField(max_digits=10, decimal_places=0, 
+    min_order_amount = models.DecimalField(max_digits=10, decimal_places=0,
                                            verbose_name=
                                            'حداقل مبلغ قابل استفاده')
-    valid_from = models.DateTimeField(verbose_name='تاریخ شروع اعتبار', 
+    valid_from = models.DateTimeField(verbose_name='تاریخ شروع اعتبار',
                                       blank=True)
-    valid_to = models.DateTimeField(verbose_name='تاریخ پایان اعتبار', 
+    valid_to = models.DateTimeField(verbose_name='تاریخ پایان اعتبار',
                                     blank=True)
 
     def __str__(self):
@@ -51,16 +51,16 @@ class Cart(models.Model):
         verbose_name='سبدخریدها'
     )
     session_id = models.CharField(max_length=255, blank=True, null=True)
-    status = models.CharField(max_length=2, choices=Status.choices, 
+    status = models.CharField(max_length=2, choices=Status.choices,
                               default=Status.DRAFT, verbose_name='وضعیت')
-    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, 
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL,
                                verbose_name='کد تخفیف', null=True, blank=True,
                                related_name='used_in_carts')
     total_price = models.DecimalField(max_digits=10, decimal_places=0,
                                       verbose_name='جمع مبلغ', default=0)
     created_at = models.DateTimeField(default=timezone.now, 
                                       verbose_name='تاریخ ایجاد', blank=True)
-    updated_at = models.DateTimeField(auto_now=True, 
+    updated_at = models.DateTimeField(auto_now=True,
                                       verbose_name='زمان اخرین تغییر')
 
     def __str__(self):
@@ -73,14 +73,12 @@ class Cart(models.Model):
 
     def update_total_price(self):
         total = self.items.aggregate(
-        total = models.Sum('total_price'))['total'] or 0
+            total=models.Sum('total_price'))['total'] or 0
         self.total_price = total
         super().save(update_fields=['total_price'])
 
     def get_total_quantity(self):
-        return self.items.aggregate(
-            total=models.Sum('quantity')
-        )['total'] or 0
+        return self.items.aggregate(total=models.Sum('quantity'))['total'] or 0
 
     def get_discount_amount(self):
         if not self.coupon:
@@ -116,16 +114,16 @@ class CartItem(models.Model):
         verbose_name='آیتم ها'
     )
     quantity = models.IntegerField(default=1, verbose_name='تعداد')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, 
-                                verbose_name='ایتم های سبدخرید', 
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
+                                verbose_name='ایتم های سبدخرید',
                                 related_name='cart_items')
     unit_price = models.DecimalField(max_digits=10, decimal_places=0,
-                                     verbose_name='قیمت فعلی', blank=True, 
+                                     verbose_name='قیمت فعلی', blank=True,
                                      null=True)
-    total_price = models.DecimalField(max_digits=10, decimal_places=0, 
+    total_price = models.DecimalField(max_digits=10, decimal_places=0,
                                       verbose_name='جمع مبلغ', editable=False)
-    added_at = models.DateTimeField(default=timezone.now, 
-                                    verbose_name='تاریخ اضافه شدن سبد', 
+    added_at = models.DateTimeField(default=timezone.now,
+                                    verbose_name='تاریخ اضافه شدن سبد',
                                     blank=True)
 
     def save(self, *args, **kwargs):

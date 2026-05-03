@@ -6,6 +6,7 @@ from .views import (
 
 app_name = "order_api"
 urlpatterns = [
+
     path("payment-request/", PaymentRequestAPI.as_view(),
          name="payment_request"),
 

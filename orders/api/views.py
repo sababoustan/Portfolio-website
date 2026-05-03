@@ -19,7 +19,7 @@ ZIBAL_VERIFY = "https://gateway.zibal.ir/v1/verify"
 
 class PaymentRequestAPI(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request):
         user = request.user
         serializer = PaymentRequestSerializer(data=request.data)
@@ -56,16 +56,16 @@ class PaymentRequestAPI(APIView):
                  "message": response.get("message")},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
-            
+
+
 class PaymentVerifyAPI(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         success = request.GET.get("success")
         track_id = request.GET.get("trackId")
         order_id = request.GET.get("orderId")
-        
+
         order = get_object_or_404(Order, authority=order_id)
         if success != "1":
             order.status = Order.status_order.Failed

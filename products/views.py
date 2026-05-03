@@ -40,9 +40,9 @@ class ProductDetailView(DetailView):
             comment.is_active = False
             comment.save()
             messages.success(
-            request,
-            "کامنت شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد"
-            )
+                request,
+                "کامنت شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد"
+                )
         return redirect(request.path)
 
 

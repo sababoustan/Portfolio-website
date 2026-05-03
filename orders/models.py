@@ -17,7 +17,7 @@ class Order(models.Model):
         Canceled = ('Canceled', ' لغو شده')
         Returned = ('Returned', 'مرجوع شده')
         Failed = ('Failed', 'پرداخت ناموفق')
-    
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -36,19 +36,19 @@ class Order(models.Model):
             verbose_name='آدرس'
         )
     status = models.CharField(max_length=50, choices=status_order.choices,
-                               default=status_order.Default, 
-                               verbose_name='وضعیت پرداخت')
+                              default=status_order.Default,
+                            verbose_name='وضعیت پرداخت')
     created_at = models.DateTimeField(default=timezone.now,
                                       verbose_name='تاریخ ثبت سفارش')
     payment_tracking_code = models.CharField(max_length=100, null=True,
                                              blank=True)
     authority = models.CharField(max_length=100, null=True, blank=True)
     total_price = models.PositiveIntegerField()
-    order_note = models.TextField(null=True, blank=True, 
+    order_note = models.TextField(null=True, blank=True,
                                   verbose_name="توضیحات سفارش")
 
     def get_total_price(self):
-        return self.cart.get_final_price()   
+        return self.cart.get_final_price()
 
     def save(self, *args, **kwargs):
         self.total_price = self.get_total_price()

@@ -10,7 +10,6 @@ from cart.api.serializers import (
     CouponSerializer,
     WishListSerializer
 )
-from rest_framework.authentication import TokenAuthentication
 from cart.models import Cart, CartItem, Coupon, Wishlist
 from products.models import Product
 from rest_framework import status
@@ -79,7 +78,7 @@ class AddToCartAPI(GenericAPIView):
             item.save()
         else:
             if qty > product.stock:
-                raise ValidationError({"qty":"این تعداد موجود نیست"})
+                raise ValidationError({"qty": "این تعداد موجود نیست"})
             CartItem.objects.create(
                 cart=cart,
                 product=product,
@@ -116,7 +115,7 @@ class UpdateCartAPI(APIView):
                 })
             item.quantity += 1
             item.save()
-            
+
         elif action == "decrease":
             if item.quantity > 1:
                 item.quantity -= 1

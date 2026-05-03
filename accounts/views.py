@@ -92,12 +92,11 @@ class CheckoutView(LoginRequiredMixin, View):
         final_price = cart.get_final_price() if cart else 0
         if address:
             context = {
-            'address_old': address,
-            'selected_id': selected_id,
-            'form': form,
-            'items': items,
-            'final_price': final_price,
-
+                'address_old': address,
+                'selected_id': selected_id,
+                'form': form,
+                'items': items,
+                'final_price': final_price,
             }
             return render(request, "accounts/address_checkout.html", context)
 
@@ -118,35 +117,35 @@ class CheckoutView(LoginRequiredMixin, View):
         return render(request, "accounts/address_checkout.html", {
             "address_form": form,
         })
-      
-        
+
+
 class ConfirmOrderView(View):
     model = Cart
     
     def post(self, request):
-            selected_address_id = request.POST.get("selected_address")
-            if not selected_address_id:
-                return redirect("accounts:checkout")
-            cart = Cart.objects.filter(user=request.user).first()
-            items = cart.items.all()
-            final_price = cart.get_final_price() 
-            address = Address.objects.get(id=selected_address_id, 
+        selected_address_id = request.POST.get("selected_address")
+        if not selected_address_id:
+             return redirect("accounts:checkout")
+        cart = Cart.objects.filter(user=request.user).first()
+        items = cart.items.all()
+        final_price = cart.get_final_price() 
+        address = Address.objects.get(id=selected_address_id, 
                                           user=request.user)
-            if address.city == "تهران":
-                shipping_cost = 50000
-            else:
-                shipping_cost = 60000
+        if address.city == "تهران":
+            shipping_cost = 50000
+        else:
+            shipping_cost = 60000
                 
-            total_to_pay = final_price + shipping_cost
-            context = {
-                "address": address,
-                "address_id": selected_address_id,
-                "final_price": final_price,
-                "shipping_cost": shipping_cost,
-                "total_to_pay": total_to_pay,
-                'items': items,
+        total_to_pay = final_price + shipping_cost
+        context = {
+            "address": address,
+            "address_id": selected_address_id,
+            "final_price": final_price,
+            "shipping_cost": shipping_cost,
+            "total_to_pay": total_to_pay,
+            "items": items,
             }
-            return render(request, "orders/preview_order.html", context)
+        return render(request, "orders/preview_order.html", context)
 
 
 def profile_page(request):

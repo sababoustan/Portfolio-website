@@ -24,11 +24,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret")
 
 IS_DOCKER = os.getenv("IS_DOCKER", "false").lower() == "true"
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 DEBUG = True
 
 allowed_hosts = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
-# ALLOWED_HOSTS = [h.strip() for h in allowed_hosts.split(",") if h.strip()]
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -117,29 +115,6 @@ else:
         }
     }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'shopgexy',
-#         'USER': 'postgres',
-#         'PASSWORD': 'sba80boo',
-#         'HOST': 'localhost',
-#         'PORT': '5433',
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST', 'db'),
-#         'PORT': os.getenv('DB_PORT', '5432'),
-#     }
-# }
-
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -189,16 +164,6 @@ else:
         }
     }        
 CACHE_TTL = 60 * 5
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
-# CACHE_TTL = 60 * 5 
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

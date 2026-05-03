@@ -4,18 +4,19 @@ from .models import User, Address
 
 class LoginForm(forms.Form):
     username_or_email = forms.CharField(label="نام کاربری یا آدرس ایمیل",
-                                         max_length=250,
-                                         required=True,
-                                         widget=forms.TextInput(attrs={
-                                        'class': 'form-control',
-                                        'placeholder': 
-                                        'نام کاربری یا آدرس ایمیل'
-        }))
+                                        max_length=250,
+                                        required=True,
+                                        widget=forms.TextInput(attrs={
+                                            'class': 'form-control',
+                                            'placeholder':
+                                            'نام کاربری یا آدرس ایمیل'
+                                            }))
     password = forms.CharField(label="کلمه عبور", max_length=250,
-                               required=True, widget=forms.PasswordInput(attrs={
-                                'class': 'form-control',
-                                'placeholder': 'کلمه عبور'
-        }))
+                               required=True, widget=forms.PasswordInput(
+                                   attrs={
+                                    'class': 'form-control',
+                                    'placeholder': 'کلمه عبور'
+                                    }))
 
 
 class RegisterForm(forms.ModelForm):
@@ -23,7 +24,7 @@ class RegisterForm(forms.ModelForm):
                                widget=forms.PasswordInput(attrs={
                                 'class': 'form-control',
                                 'placeholder': 'پسورد'
-    }))
+                                }))
 
     class Meta:
         model = User
@@ -44,8 +45,8 @@ class AddressForm(forms.ModelForm):
 
     class Meta:
         model = Address
-        fields = ['full_name', 'city', 'street_address', 'postal_code',
-                'phone_number']
+        fields = ['full_name', 'city', 'street_address', 'postal_code', 
+                  'phone_number']
         widgets = {
             'full_name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -68,4 +69,3 @@ class AddressForm(forms.ModelForm):
                 'placeholder': 'شماره تماس'
             }),
         }
-

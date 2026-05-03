@@ -27,9 +27,9 @@ class Comment(models.Model):
     )
     body = models.CharField(max_length=250, verbose_name='بدنه کامنت')
     is_active = models.BooleanField(default=True, verbose_name='نمایش در سایت')
-    created_at = models.DateTimeField(auto_now_add=True, 
+    created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='تاریخ انتشار')
-    
+
     def __str__(self):
         return f"{self.user}-{self.body[:30]}"
     
@@ -37,4 +37,3 @@ class Comment(models.Model):
         verbose_name = 'کامنت'
         verbose_name_plural = 'کامنت ها'
         ordering = ['-created_at']
-    

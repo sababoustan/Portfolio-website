@@ -11,7 +11,7 @@ class PaymentRequestSerializer(serializers.Serializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    status_display = serializers.CharField(source='get_status_display', 
+    status_display = serializers.CharField(source='get_status_display',
                                            read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     address = serializers.PrimaryKeyRelatedField(read_only=True)

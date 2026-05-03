@@ -26,13 +26,13 @@ class IsAdminOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return bool(request.user and request.user.is_staff)
-    
+
 
 class ProductListAPI(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
     permission_classes = [IsAdminOrReadOnly]
-    
+
     def get(self, request, *args, **kwargs):
         cache_key = "product_list"
         products = cache.get(cache_key)
@@ -41,21 +41,21 @@ class ProductListAPI(ListCreateAPIView):
             serializer = self.serializer_class(queryset, many=True)
             products = serializer.data
             cache.set(cache_key, products, timeout=settings.CACHE_TTL)
-        
+
         return Response(products)
-    
+
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         cache.delete("product_list")
         return response
 
-    
+
 class ProductDetailAPI(RetrieveDestroyAPIView):
     queryset = Product.objects.all()
     lookup_field = "slug"
     serializer_class = ProductDetailSerializer
     permission_classes = [IsAdminOrReadOnly]
-    
+
     def get(self, request, *args, **kwargs):
         slug = self.kwargs.get('slug')
         cache_key = f"detail_product_{slug}"
@@ -65,7 +65,7 @@ class ProductDetailAPI(RetrieveDestroyAPIView):
             serializer = self.serializer_class(product_obj)
             product = serializer.data
             cache.set(cache_key, product, timeout=settings.CACHE_TTL)
-                    
+
         return Response(product)
 
 
@@ -102,8 +102,8 @@ class ProductSearchAPI(ListAPIView):
                 Q(slug__icontains=search)
             )
         return qs
-    
-    
+
+
 class RecommendationProductAPI(ListAPIView):
     serializer_class = ProductDetailSerializer
     permission_classes = [IsAuthenticated]
@@ -117,7 +117,7 @@ class RecommendationProductAPI(ListAPIView):
         wishlist_product_ids = Wishlist.objects.filter(
             user=self.request.user
         ).values_list('product_id', flat=True)
-        
+
         product_ids = order_product_ids.union(wishlist_product_ids)
         category_id = Product.objects.filter(
             id__in=product_ids
@@ -128,5 +128,3 @@ class RecommendationProductAPI(ListAPIView):
             ).exclude(
                 id__in=product_ids
                 )[:10]
-
-    
