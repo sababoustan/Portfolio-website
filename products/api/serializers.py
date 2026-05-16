@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from products.models import Product
-from comments.models import Comment
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
@@ -17,17 +16,4 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             "image",
             "category",
             "sku"
-            ]
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)
-
-    class Meta:
-        model = Comment
-        fields = [
-            "id",
-            "user",
-            "body",
-            "created_at"
             ]

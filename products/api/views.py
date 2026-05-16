@@ -4,17 +4,15 @@ from rest_framework.generics import (
                                 ListAPIView
                                 )
 from rest_framework.permissions import (
-                                IsAuthenticatedOrReadOnly,
                                 BasePermission,
                                 IsAuthenticated,
                                 SAFE_METHODS,
+                                AllowAny
                             )
 from django.db.models import Q
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from products.api.serializers import ProductDetailSerializer, CommentSerializer
+from products.api.serializers import ProductDetailSerializer
 from products.models import Product
-from comments.models import Comment
 from orders.models import OrderItem
 from cart.models import Wishlist
 from django.core.cache import cache
@@ -31,7 +29,7 @@ class IsAdminOrReadOnly(BasePermission):
 class ProductListAPI(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         cache_key = "product_list"
@@ -67,26 +65,6 @@ class ProductDetailAPI(RetrieveDestroyAPIView):
             cache.set(cache_key, product, timeout=settings.CACHE_TTL)
 
         return Response(product)
-
-
-class ProductCommentAPI(ListCreateAPIView):
-    serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        return Comment.objects.filter(
-            product__slug=self.kwargs["slug"],
-            is_active=True,
-            parent__isnull=True
-        )
-
-    def perform_create(self, serializer):
-        product = get_object_or_404(Product, slug=self.kwargs["slug"])
-        serializer.save(
-            user=self.request.user,
-            product=product,
-            is_active=False
-        )
 
 
 class ProductSearchAPI(ListAPIView):

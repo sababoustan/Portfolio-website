@@ -135,88 +135,39 @@
 
 <!-- ================= COMMENTS ================= -->
 <!-- ================= COMMENTS SECTION ================= -->
-<section class="comment-section">
+ <section class="comment-section" data-slug="{{ product.slug }}">
 
-    <!-- ====== COMMENTS LIST ====== -->
     <div class="product-comments">
-
         <h4 class="comments-title">
-            نظرات کاربران ({{ comments.count }})
+            نظرات کاربران (<span id="comments-count">0</span>)
         </h4>
 
-        {% if comments %}
-            {% for comment in comments %}
-                <div class="comment-card">
-
-                    <div class="comment-header">
-                        <span class="comment-user">
-                            {{ comment.user.username }}
-                        </span>
-
-                        <span class="comment-date">
-                            {{ comment.created_at|date:"Y/m/d" }}
-                        </span>
-                    </div>
-
-                    <p class="comment-text">
-                        {{ comment.body }}
-                    </p>
-
-                    <!-- ===== ADMIN REPLY ===== -->
-                    {% for reply in comment.replies.all %}
-                        {% if reply.is_active %}
-                            <div class="admin-reply">
-                                <strong>پاسخ مدیر</strong>
-                                <p>{{ reply.body }}</p>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="no-comments">
-                هنوز نظری برای این محصول ثبت نشده است.
-            </p>
-        {% endif %}
-
+        <div id="comments-list">
+            <p class="no-comments">در حال بارگذاری نظرات...</p>
+        </div>
     </div>
 
-    <!-- ====== COMMENT FORM ====== -->
     <div class="comment-form-wrapper">
-
-        <h4 class="comment-form-title">
-            ثبت نظر
-        </h4>
-
-        {% if user.is_authenticated %}
-            <form method="post" class="comment-form">
-                {% csrf_token %}
-
-                <textarea
-                    name="body"
-                    class="comment-textarea"
-                    placeholder="نظر خود را بنویسید..."
-                    required
-                ></textarea>
-
-                <button type="submit" class="comment-submit-btn">
-                    ارسال نظر
-                </button>
-
-                <p class="comment-note">
-                    نظر شما پس از تأیید مدیر نمایش داده خواهد شد.
-                </p>
-            </form>
-        {% else %}
-            <p class="login-warning">
-                برای ثبت نظر باید
-                <a href="{% url 'accounts:login' %}">وارد حساب کاربری</a>
-                شوید.
-            </p>
-        {% endif %}
-
+    <h4 class="comment-form-title">ثبت نظر</h4>
+    <form id="comment-form" style="display: none;">
+        {% csrf_token %}
+        <textarea id="comment-body" class="comment-textarea" placeholder="نظر خود را بنویسید..." required></textarea>
+        <button type="submit" class="comment-submit-btn">ارسال نظر</button>
+    </form>
+    <div id="login-warning" style="display: none;">
+        <p class="login-warning">
+            برای ثبت نظر باید
+            <a href="{% url 'accounts:login' %}">وارد حساب کاربری</a>
+            شوید.
+        </p>
     </div>
+</div>
+</section>
+{% block extra_js %}
+<script src="{% static 'assets/js/comments.js' %}"></script>
+{% endblock %}
+</div>
+<script src="{% static 'assets/js/product_detail.js' %}"></script>
 
 </section>
 
