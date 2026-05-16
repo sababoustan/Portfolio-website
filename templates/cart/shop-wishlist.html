@@ -3,9 +3,6 @@
 {% block title %}لیست علاقه مندی ها{% endblock %}
 
 {% block content %}
-
-	<!--===== End of Header offcanvas about ======-->
-
 	<!--=======  breadcrumb area =======-->
 
 	<div class="breadcrumb-area breadcrumb-bg-1 pt-50 pb-70 mb-130">
@@ -43,55 +40,17 @@
 					<div class="cart-table-container">
 						<table class="cart-table">
 							<thead>
-								<tr>
-									<th class="product-name" colspan="2">محصول</th>
-									<th class="product-price">قیمت</th>
-									<th class="product-quantity">تعداد</th>
-									<th class="product-subtotal">&nbsp;</th>
-									<th class="product-remove">&nbsp;</th>
-								</tr>
+							<tr>
+								<th>محصول</th>
+								<th>قیمت</th>
+								<th>حذف</th>
+							</tr>
 							</thead>
-
-									<tbody>
-
-									{% for item in items %}
-									<tr>
-										<td class="product-thumbnail">
-											<a href="{% url 'products:detail' item.product.slug %}">
-												<img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class="img-fluid">
-											</a>
-										</td>
-
-										<td class="product-name">
-											<a href="{% url 'products:detail' item.product.slug %}">
-												{{ item.product.title }}
-											</a>
-										</td>
-
-										<td class="product-price">
-											<span class="price">{{ item.product.price }} تومان</span>
-										</td>
-
-										<td class="product-remove">
-											<a href="javascript:void(0)"
-												class="remove-wishlist"
-												data-id="{{ item.product.id }}"
-												title="حذف از علاقه‌مندی‌ها">
-												<i class="fa fa-times"></i>
-											</a>
-
-										</td>
-
-									</tr>
-									{% empty %}
-									<tr>
-										<td colspan="5" class="text-center">
-											هنوز هیچ محصولی در لیست علاقه‌مندی‌ها نیست.
-										</td>
-									</tr>
-									{% endfor %}
-
-									</tbody>
+							<tbody id="wishlist-table-body">
+								<tr>
+									<td colspan="4" class="text-center">در حال بارگذاری لیست علاقه‌مندی‌ها...</td>
+								</tr>
+							</tbody>
 
 						</table>
 					</div>
@@ -101,7 +60,6 @@
 			</div>
 		</div>
 	</div>
-
 	<!--=====  End of wishlist page content  ======-->
 
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from cart.models import Cart, CartItem, Wishlist
-
+from products.models import Product 
 
 class CartItemSerializer(serializers.ModelSerializer):
 
@@ -70,12 +70,19 @@ class CouponSerializer(serializers.Serializer):
                                  trim_whitespace=True)
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["id", "title", "slug", "image", "price"]
+
+
 class WishListSerializer(serializers.ModelSerializer):
-    product = serializers.StringRelatedField(read_only=True)
+    product = ProductSerializer(read_only=True)
 
     class Meta:
         model = Wishlist
         fields = [
+            "id",
             "product",
             "added_at",
         ]

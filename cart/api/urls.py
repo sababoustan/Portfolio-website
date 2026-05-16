@@ -13,9 +13,9 @@ app_name = "cart_api"
 urlpatterns = [
     path("cart/", CartAPI.as_view(), name="cart"),
     path("cartitem/<int:item_id>/", CartItemAPI.as_view(), name="cartitem"),
-    path("cart/add/", AddToCartAPI.as_view(), name="add-to-cart"),
-    path("cart/update/", UpdateCartAPI.as_view(), name="cart-update"),
-    path("cart/coupon/", CouponAPI.as_view(), name="coupon"),
+    path("add/", AddToCartAPI.as_view(), name="add-to-cart"),
+    path("update/", UpdateCartAPI.as_view(), name="cart-update"),
+    path("coupon/", CouponAPI.as_view(), name="coupon"),
     path("wishlist/", WishlistAPI.as_view(), name="wishlist"),
     path("wishlist/toggle/<int:product_id>/", WishlistToggleAPIView.as_view(),
          name="wishlist"),

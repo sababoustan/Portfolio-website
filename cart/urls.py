@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (CartView, AddToCartView, RemoveItemView,
-                    UpdateCartAjaxView, ApplyCouponView, WishlistListView,
+                    UpdateCartAjaxView, ApplyCouponView, wishlist_page,
                     WishlistToggleView)
 
 app_name = 'cart'
@@ -17,7 +17,7 @@ urlpatterns = [
 
     path("apply-coupon/", ApplyCouponView.as_view(), name="apply_coupon"),
 
-    path("wishlist/", WishlistListView.as_view(), name="wishlist"),
+    path("wishlist/", wishlist_page, name="wishlist"),
 
     path("wishlist/toggle/<int:product_id>/", WishlistToggleView.as_view(),
          name="wishlist_toggle"),

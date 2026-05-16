@@ -36,40 +36,6 @@
       </div>
 
       <!--=======  End of single slider  =======-->
-
-      <!--=======  single slider  =======-->
-      <div class="lezada-single-slider bg-img" data-bg="{%static 'assets/images/electronics-two/slider-2.png' %}" dir="ltr">
-        <div class="container h-100" dir="ltr">
-          <div class="row text-center justify-content-center justify-content-lg-center align-items-center h-100" dir="ltr">
-            <div class="lezada-single-slider__content" dir="ltr">
-              <h5 class="subtitle subtitle--black">#تجهیزات جانبی</h5>
-              <h2 class="main-title main-title--black">تخفیف بزرگ <br>50% تخفیف</h2>
-              <a href="shop-left-sidebar.html" class="lezada-button lezada-button--dark lezada-button--medium">خرید
-                اکنون</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!--=======  End of single slider  =======-->
-
-      <!--=======  single slider  =======-->
-      <div class="lezada-single-slider bg-img" data-bg="{%static 'assets/images/electronics-two/slider-3.jpg' %}" dir="ltr">
-        <div class="container h-100" dir="ltr">
-          <div
-            class="row text-center text-lg-start justify-content-center justify-content-lg-end align-items-center h-100" dir="ltr">
-            <div class="lezada-single-slider__content" dir="ltr">
-              <h5 class="subtitle subtitle--black">#تجهیزات جانبی</h5>
-              <h2 class="main-title main-title--black">تخفیف بزرگ <br>50% تخفیف</h2>
-              <a href="shop-left-sidebar.html" class="lezada-button lezada-button--dark lezada-button--medium">خرید
-                اکنون</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!--=======  End of single slider  =======-->
-
     </div>
 
     <!--=======  End of slider-wrapper  =======-->
@@ -79,7 +45,7 @@
 	=            hover banner area         =
 	=============================================-->
 
-  <div class="hover-banner-area mb-70 mb-md-50 mb-sm-30">
+<div class="hover-banner-area mb-70 mb-md-50 mb-sm-30">
       <section class="recommended-products">
           <div class="container">
 
@@ -116,98 +82,148 @@
 
           <!--=======  tab product content  =======-->
 
-          <div class="tab-content" id="nav-tabContent2">
-            <div class="tab-pane fade show active" id="product-series-1" role="tabpanel"
-              aria-labelledby="product-tab-1">
-              <div class="row" id="product-container">
-                <script>
-                async function loadProducts() {
-                    const products = await fetch("/api/products/").then(res => res.json());
+<div class="tab-content" id="nav-tabContent2">
+  <div class="tab-pane fade show active" id="product-series-1" role="tabpanel"
+    aria-labelledby="product-tab-1">
 
-                    const wishlist = await fetch("/api/wishlist/").then(res => res.json());
+    <div class="row" id="product-container">
 
-                    const wishlistIds = wishlist.map(item => item.product);
+<script>
+async function loadProducts() {
 
-                    const container = document.getElementById("product-container");
-                    container.innerHTML = "";
+    const products = await fetch("/api/products/products-list/")
+        .then(res => res.json());
 
-                    products.forEach(product => {
-                        const isActive = wishlistIds.includes(product.id) ? "active" : "";
+    let wishlistIds = [];
+    const token = localStorage.getItem("access");
 
-                        container.innerHTML += `
-                            <div class="col-12 col-lg-3 col-md-6 col-sm-6 mb-45">
-                                <div class="single-product">
-                                    <div class="single-product__image">
-                                        <a class="image-wrap" href="/products/${product.slug}/">
-                                            <img src="${product.image}" class="img-fluid" alt="${product.title}">
-                                        </a>
-                                        <div class="single-product__floating-icons">
-                                            <span class="wishlist">
-                                                <div class="single-icon wishlist">
-                                                    <a href="#" class="add-to-wishlist" data-product="${product.id}">
-                                                        <i class="ion-heart ${isActive}"></i>
-                                                    </a>
-                                                </div>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="single-product__content">
-                                        <h4 class="product-title">
-                                            <a href="/products/detail/${product.slug}">${product.title}</a>
-                                        </h4>
-                                        ${product.discount_price
-                                            ? `
-                                                <p style="text-decoration: line-through; color:#888;">${product.price} تومان</p>
-                                                <p style="color: red; font-weight: bold;">${product.discount_price} تومان</p>
-                                              `
-                                            : `<p>${product.price} تومان</p>`
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
+    if (token) {
+        try {
+
+            const res = await fetch("/api/cart/wishlist/", {
+                headers: {
+                    "Authorization": "Bearer " + token
                 }
+            });
 
-                loadProducts();
-                </script>
-                    <div class="pagination-wrapper">
-                      <ul class="pagination">
+            if (res.ok) {
+                const wishlist = await res.json();
+                wishlistIds = wishlist.map(item => item.product.id || item.product);
+            }
 
-                          {% if has_previous %}
-                              <li class="page-item">
-                                  <a class="page-link prev" href="?page={{ current_page|add:'-1' }}">
-                                      « قبلی
-                                  </a>
-                              </li>
-                          {% endif %}
+            if (res.status === 401) {
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+            }
 
-                          <li class="page-item active">
-                              <span class="page-link">
-                                  صفحه {{ current_page }} از {{ total_pages }}
-                              </span>
-                          </li>
+        } catch (e) {
+            console.error("wishlist error", e);
+        }
+    }
 
-                          {% if has_next %}
-                              <li class="page-item">
-                                  <a class="page-link next" href="?page={{ current_page|add:'1' }}">
-                                      بعدی »
-                                  </a>
-                              </li>
-                          {% endif %}
+    const container = document.getElementById("product-container");
+    container.innerHTML = "";
 
-                      </ul>
-                  </div>
+    products.forEach(product => {
 
+        const isActive = wishlistIds.includes(product.id) ? "active" : "";
 
-          </div> 
+        container.innerHTML += `
+        <div class="col-12 col-lg-3 col-md-6 col-sm-6 mb-45">
+            <div class="single-product">
 
+                <div class="single-product__image">
+                    <a class="image-wrap" href="/products/${product.slug}/">
+                        <img src="${product.image}" class="img-fluid" alt="${product.title}">
+                    </a>
+
+                    <div class="single-product__floating-icons">
+                        <span class="wishlist">
+                            <div class="single-icon wishlist">
+                                <a href="javascript:void(0)" class="add-to-wishlist" data-product="${product.id}">
+                                    <i class="ion-heart ${isActive}"></i>
+                                </a>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="single-product__content">
+
+                    <h4 class="product-title">
+                        <a href="/products/detail/${product.slug}">
+                            ${product.title}
+                        </a>
+                    </h4>
+
+                    ${
+                        product.discount_price
+                        ?
+                        `
+                        <p style="text-decoration:line-through;color:#888;">
+                            ${product.price} تومان
+                        </p>
+                        <p style="color:red;font-weight:bold;">
+                            ${product.discount_price} تومان
+                        </p>
+                        `
+                        :
+                        `<p>${product.price} تومان</p>`
+                    }
+
+                </div>
+
+            </div>
         </div>
+        `;
+    });
+}
 
-      </div>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    await loadProducts();
+
+    const token = localStorage.getItem("access");
+    if (token) {
+        loadRecommendedProducts();
+    }
+
+});
+</script>
+
+<div class="pagination-wrapper">
+<ul class="pagination">
+
+{% if has_previous %}
+<li class="page-item">
+<a class="page-link prev" href="?page={{ current_page|add:'-1' }}">
+« قبلی
+</a>
+</li>
+{% endif %}
+
+<li class="page-item active">
+<span class="page-link">
+صفحه {{ current_page }} از {{ total_pages }}
+</span>
+</li>
+
+{% if has_next %}
+<li class="page-item">
+<a class="page-link next" href="?page={{ current_page|add:'1' }}">
+بعدی »
+</a>
+</li>
+{% endif %}
+
+</ul>
+</div>
+
     </div>
   </div>
 </div>
+
   
   <!--=============================================
 	=            footer top         =

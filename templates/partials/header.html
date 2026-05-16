@@ -167,18 +167,36 @@
     <!--=======  End of header bottom  =======-->
 
   </header>
-
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-    fetch("/api/wishlist/")
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.items) {
-                document.getElementById("wishlist-count").textContent = data.items.length;
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = localStorage.getItem("access");
+    if (!token) {
+        console.log("Guest user - skipping header wishlist count");
+        return;
+    }
+    try {
+        const res = await fetch("/api/cart/wishlist/", {
+            headers: {
+                "Authorization": "Bearer " + token
             }
-        })
-        .catch(error => console.log("Wishlist API error:", error));
+        });
+        if (res.ok) {
+            const data = await res.json();
+            const countEl = document.getElementById("wishlist-count");
+            if (countEl && Array.isArray(data)) {
+                countEl.textContent = data.length; 
+            }
+        }
+        if (res.status === 401) {
+            localStorage.removeItem("access");
+            localStorage.removeItem("refresh");
+        }
+    } catch (error) {
+        console.log("Wishlist API error:", error);
+    }
 });
 </script>
+
+
 
 
