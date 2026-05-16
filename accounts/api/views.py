@@ -1,14 +1,14 @@
 from rest_framework.generics import (
-                                CreateAPIView,
                                 ListAPIView,
                                 DestroyAPIView,
                                 RetrieveUpdateDestroyAPIView
                             )
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
-from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth import logout, get_user_model
 from rest_framework.permissions import (
-    IsAuthenticated, IsAdminUser)
+    IsAuthenticated, IsAdminUser, AllowAny)
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -18,14 +18,22 @@ from accounts.api.serializers import (
 from accounts.models import Address
 from cart.api.serializers import CartItemSerializer
 from cart.models import Cart
-
-
 User = get_user_model()
 
 
-class RegisterAPI(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
+class RegisterAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "message": "ثبت نام با موفقیت انجام شد",
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
+            },status=201)
 
 
 class UserListAPI(ListAPIView):
@@ -34,17 +42,19 @@ class UserListAPI(ListAPIView):
     permission_classes = [IsAdminUser]
 
 
-class LoginAPI(APIView):    
+class LoginAPI(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data["user"]
-        login(request, user)
-        return Response(
-            {"detail": "Logged in"}, 
-            status=status.HTTP_200_OK
-            )
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
+        }, status=200)
 
 
 class LogoutAPI(APIView):

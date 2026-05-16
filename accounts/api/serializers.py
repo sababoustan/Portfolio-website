@@ -20,15 +20,23 @@ class RegisterSerializer(serializers.ModelSerializer):
             "email",
             "password"
         ]
+        
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("این ایمیل قبلاً ثبت شده است.")
+        return value
 
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("این نام کاربری قبلاً ثبت شده است.")
+        return value
+    
     def create(self, validated_data):
-        user = User(
+        return User.objects.create_user(
             username=validated_data["username"],
-            email=validated_data["email"],   
+            email=validated_data["email"],
+            password=validated_data["password"]
         )
-        user.set_password(validated_data["password"])
-        user.save()
-        return user
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,11 +50,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(write_only=True, 
+    old_password = serializers.CharField(write_only=True,
                                          trim_whitespace=False)
-    new_password = serializers.CharField(write_only=True, min_length=8, 
+    new_password = serializers.CharField(write_only=True, min_length=8,
                                          trim_whitespace=False)
-    new_password2 = serializers.CharField(write_only=True, min_length=8, 
+    new_password2 = serializers.CharField(write_only=True, min_length=8,
                                           trim_whitespace=False)
 
     def validate_old_password(self, value):
