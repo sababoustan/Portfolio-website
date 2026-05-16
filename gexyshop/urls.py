@@ -23,12 +23,14 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path("api/accounts/", include("accounts.api.urls")),
+    path("api/products/", include("products.api.urls")),
+    path("api/cart/", include("cart.api.urls")),
+    path("api/orders/", include("orders.api.urls")),
+    path("api/comments/", include("comments.api.urls")),
     path('accounts/', include('accounts.urls')),
     path('products/', include('products.urls')),
     path('cart/', include('cart.urls')),
     path('order/', include('orders.urls')),
-    path("api/", include("products.api.urls")),
-    path("api/", include("accounts.api.urls")),
-    path("api/", include("cart.api.urls")),
-    path("api/", include("orders.api.urls")),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-        fetch(`/api/products/detail/${PRODUCT_SLUG}/`)
+        fetch(`/api/products/products-detail/${PRODUCT_SLUG}/`)
         .then(res => res.json())
         .then(product => {
 
@@ -37,3 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("access");
+    const commentForm = document.getElementById("comment-form");
+    const loginWarning = document.getElementById("login-warning");
+
+    if (token) {
+        if (commentForm) commentForm.style.display = "block";
+        if (loginWarning) loginWarning.style.display = "none";
+    } else {
+        if (commentForm) commentForm.style.display = "none";
+        if (loginWarning) loginWarning.style.display = "block";
+    }
+});
+

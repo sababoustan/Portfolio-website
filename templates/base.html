@@ -53,7 +53,7 @@
         {% block content %}
         {% endblock %}
     </main>
-
+    <span id="wishlist-count">0</span>
     <!-- Footer -->
     {% include 'partials/footer.html' %}
 
@@ -69,17 +69,17 @@
             <!-- Plugins JS -->
             <script src="{%static 'assets/js/plugins.js' %}"></script>
 
+            <!-- recommended products JS -->
+           <script src="{% static 'assets/js/recommendedproducts.js' %}"></script> 
+
+           <!-- wishlist JS -->
+            <script src="{% static 'assets/js/wishlist.js' %}"></script>
+
             <!-- Main JS -->
             <script src="{%static 'assets/js/main.js' %}"></script>
 
-            <!-- wishlist JS -->
-            <script src="{% static 'assets/js/wishlist.js' %}"></script>
-
             <!-- cart JS -->
             <script src="{% static 'assets/js/cart.js' %}"></script>
-
-            <!-- products detail JS -->
-           <script src="{% static 'assets/js/product_detail.js' %}"></script>
 
             <!-- quantity JS -->
             <script src="{% static 'assets/js/quantity.js' %}"></script>
@@ -90,8 +90,7 @@
             <!-- search JS -->
            <script src="{% static 'assets/js/search.js' %}"></script> 
 
-           <!-- recommended products JS -->
-           <script src="{% static 'assets/js/recommendedproducts.js' %}"></script> 
+           
 
 
 <script>
@@ -105,7 +104,6 @@ window.addEventListener("pageshow", function(event) {
     }
 });
 </script>
-
 </body>
 </html>
 

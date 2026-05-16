@@ -1,13 +1,20 @@
-async function loadRecommendedProducts(){
+const token = localStorage.getItem("access");
 
+if (!token) {
+    console.log("User not logged in");
+}
+async function loadRecommendedProducts(){
+    if (!localStorage.getItem("access")) {
+    alert("ابتدا وارد حساب شوید");
+    return;
+    }
     const container = document.getElementById("recommended-products");
     if (!container) return;
-
     try{
 
-        const response = await fetch("/api/recommendation/",{
+        const response = await fetch("/api/products/recommendation/",{
             headers:{
-                "Authorization":"Bearer " + localStorage.getItem("access")
+                "Authorization":"Bearer " + token
             }
         });
 
@@ -55,5 +62,4 @@ async function loadRecommendedProducts(){
 
 }
 
-loadRecommendedProducts();
 
