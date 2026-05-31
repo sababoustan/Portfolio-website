@@ -10,31 +10,35 @@ This project is designed as a **portfolio project** to demonstrate backend engin
 
 This project implements a simple online shop with features such as:
 
-- User authentication
-- Product listing
-- Shopping cart
-- Order creation
-- Online payment integration
-- Payment verification
-- Stock management
-
-The main goal of this project is to showcase:
-- Proper project structure
-- Separation of concerns
-- Real-world payment flow
-- Unit testing of business logic
+- Service Layer Architecture
+- JWT-based authentication
+- Product catalog and search
+- Shopping cart management
+- Wishlist system
+- Coupon & discount system
+- Order management
+- Online payment integration (Zibal)
+- Payment verification & stock management
+- Product recommendation system
+- Redis caching
+- RESTful APIs
+- Dockerized deployment
+- Unit Tested Business Logic
 
 ---
 
 ## 🧰 Tech Stack
 
-- **Python**
-- **Django**
-- **pytest / pytest-django**
-- **PostgreSQL (primary database)**
-- **Zibal Payment Gateway**
-  Zibal is used as a real Iranian payment gateway to simulate a production payment flow.
-- HTML / CSS / JavaScript (basic frontend)
+- Python
+- Django
+- Django REST Framework
+- PostgreSQL
+- Redis
+- SimpleJWT
+- Docker
+- Docker Compose
+- pytest / pytest-django
+- Zibal Payment Gateway
 
 ---
 
@@ -43,144 +47,256 @@ The main goal of this project is to showcase:
 ```text
 project_django/
 ├── accounts/        # Authentication, user addresses
+│   ├── api/
 ├── cart/            # Shopping cart logic
+│   ├── api/
 ├── comments/        # Product comments
+│   ├── api/
+├── gexyshop/        # Core project configuration
 ├── main/            # Homepage & landing views
-├── orders/          # Orders, payments, service layer
-│   ├── services.py
-│   ├── views.py
-│   ├── urls.py
-│   └── tests/
-│       ├── conftest.py
-│       └── test_payment_service.py
-├── products/        # Product catalog
-├── templates/       # HTML templates (per app)
-├── static/          # Static assets (css, js, images)
 ├── media/           # Uploaded media
+├── orders/          # Orders, payments, service layer
+│   ├── api/
+│   ├── services.py
+│   └── tests/
+├── products/        # Product catalog
+│   ├── api/
+├── static/          # Static assets
+├── templates/       # HTML templates
+├── .dockerignore
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
 ├── manage.py
 ├── pytest.ini
-└── README.md
+├── README.md
+└── requirements.txt
+---
+
 
 ---
 
-🧠 Architecture
+## 🧠 Architecture
 
 This project follows a Service Layer architecture.
 
 Business logic is extracted from Django views and placed inside service classes.
 Views are kept thin and are only responsible for handling HTTP requests and responses.
 
-View → Service → Model
-
+```text
+Request
+   ↓
+View
+   ↓
+Service Layer
+   ↓
+Model
+   ↓
+Database
+```
 
 This approach improves:
 
-Code readability
+- Code readability
+- Testability
+- Maintainability
+- Separation of concerns
 
-Testability
 
-Maintainability
+## 🔐 Authentication
 
-Separation of concerns
+JWT-based authentication is implemented using SimpleJWT.
 
-🧩 Service Layer
+Features:
+
+- Access Token
+- Refresh Token
+- User Registration
+- Login
+- Logout
+- Password Change
+- Authenticated Profile Management
+
+## 🌐 REST API Features
+
+- User Registration API
+- JWT Login / Refresh Token
+- Profile Management API
+- Password Change API
+- Product List API
+- Product Detail API
+- Product Search API
+- Shopping Cart API
+- Wishlist API
+- Coupon System API
+- Order Management API
+- Payment Request API
+- Payment Verification API
+- Product Recommendation API
+- Comment System API
+
+## 🧩 Service Layer
 
 Business logic is implemented inside dedicated service classes.
 
-PaymentService
+### PaymentService
 
-The PaymentService handles all payment-related logic:
-
+```python
 PaymentService.verify_and_pay_order(order, track_id)
+```
 
 
 Responsibilities:
 
-Verify payment with Zibal gateway
+- Verify payment with Zibal gateway
+- Handle duplicate (idempotent) callbacks
+- Validate product stock
+- Update order status atomically
+- Reduce product stock
+- Clear cart after successful payment
 
-Handle duplicate (idempotent) callbacks
+## ⚡ Caching Strategy
 
-Validate product stock
+Cache invalidation is performed automatically whenever product data changes.
 
-Update order status atomically
+Cached Endpoints:
 
-Reduce product stock
+- Product List API
+- Product Detail API
 
-Clear cart after successful payment
+## 💡 Product Recommendation
 
-All critical operations are wrapped inside a database transaction.
+A recommendation engine suggests products based on:
 
-💳 Payment Flow
+- User purchase history
+- Wishlist activity
+- Product categories
 
-User confirms the order
+## 🐳 Docker Support
 
-Payment request is sent to Zibal
+The project is fully containerized using Docker and Docker Compose.
 
-User is redirected to the payment gateway
+Included services:
 
-Gateway redirects back to callback URL
+- Django Application
+- PostgreSQL Database
+- Redis Cache
 
-Payment is verified inside the service layer
+Development environment can be started with a single command using Docker Compose.
 
-Order status is updated and stock is reduced
+## 🏗 Engineering Concepts Demonstrated
 
-🧪 Testing
+- Service Layer Architecture
+- Database Transactions
+- JWT Authentication
+- Redis Caching
+- REST API Design
+- External Payment Integration
+- Unit Testing
+- Permission-based Access Control
+- Docker Containerization
+- Performance Optimization
 
-Unit tests are written for service layer logic, not views.
+## 💳 Payment Flow
+
+1. User confirms the order
+2. Order is created
+3. Payment request is sent to Zibal
+4. User is redirected to the payment gateway
+5. Gateway redirects to callback URL
+6. Payment is verified
+7. Stock is updated atomically
+8. Cart is cleared
+9. Order status becomes Paid
+
+## 🧪 Testing
+Unit tests are written for service layer business logic.
 
 Covered scenarios:
 
-Successful payment
+- Successful payment verification
+- Duplicate payment handling
+- Payment gateway failures
+- Stock validation errors
+- Coupon validation
+- Order status updates
 
-Duplicate payment verification
+Tools:
 
-Payment gateway failure
+- pytest
+- pytest-django
+- mocking external HTTP requests
 
-Stock validation errors
+## ⭐ Key Features
 
-Testing tools:
+- Service Layer Architecture
+- JWT Authentication
+- Redis Caching
+- Dockerized Environment
+- Payment Gateway Integration
+- Product Recommendation System
+- Coupon & Discount System
+- Wishlist Functionality
+- Unit Tested Business Logic
+- PostgreSQL Database
 
-pytest
+## ⚙️ Setup & Run
 
-pytest-django
+### Prerequisites
 
-mocking external HTTP requests
+- Python 3.x
+- PostgreSQL
+- Redis
+- Docker (optional)
 
-⚙️ Setup & Run
-Prerequisites
+### Installation
 
-Python 3.x
-
-PostgreSQL
-
-Installation
+```bash
 git clone <repository-url>
 cd project_django
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
-Environment Variables
+### Environment Variables
 
-Create a .env file and configure database settings:
-
+```env
 DB_NAME=your_db_name
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
 DB_PORT=5432
+SECRET_KEY=your_secret_key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
 
-Run migrations and server
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+### Run Migrations and Server
+
+```bash
 python manage.py migrate
 python manage.py runserver
+```
 
-Run tests
+### Run with Docker
+
+```bash
+docker-compose up --build
+```
+
+### Run Tests
+
+```bash
 pytest
+```
 
-👤 Author
-
+## 👤 Author
 Developed by Saba Boustan Doust
 
-📌 Note:
+## 📌 Note
 This project is focused on backend architecture and business logic.
 Frontend templates are intentionally kept minimal.
