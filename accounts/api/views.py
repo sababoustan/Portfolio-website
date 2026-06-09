@@ -9,7 +9,9 @@ from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth import logout, get_user_model
 from rest_framework.permissions import (
     IsAuthenticated, IsAdminUser, AllowAny)
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from accounts.api.serializers import (
@@ -21,9 +23,10 @@ from cart.models import Cart
 User = get_user_model()
 
 
-class RegisterAPI(APIView):
+class RegisterAPI(GenericAPIView):
     permission_classes = [AllowAny]
 
+    @swagger_auto_schema(request_body=RegisterSerializer)
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -33,7 +36,7 @@ class RegisterAPI(APIView):
             "message": "ثبت نام با موفقیت انجام شد",
             "access": str(refresh.access_token),
             "refresh": str(refresh)
-            },status=201)
+            }, status=201)
 
 
 class UserListAPI(ListAPIView):
