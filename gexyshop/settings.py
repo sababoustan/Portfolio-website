@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'comments',
     'orders',
     'drf_yasg',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'gexyshop.urls'
@@ -98,6 +100,9 @@ SIMPLE_JWT = {
 WSGI_APPLICATION = 'gexyshop.wsgi.application'
 AUTH_USER_MODEL = 'accounts.User'
 
+
+IS_DOCKER = os.getenv("IS_DOCKER", "false").lower() == "true"
+
 if IS_DOCKER:
     DATABASES = {
         'default': {
@@ -105,8 +110,8 @@ if IS_DOCKER:
             'NAME': os.getenv('DB_NAME'),
             'USER': os.getenv('DB_USER'),
             'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST', 'db'),
-            'PORT': os.getenv('DB_PORT', '5432'),
+            'HOST': 'db',
+            'PORT': '5432',
         }
     }
 else:
@@ -120,7 +125,6 @@ else:
             'PORT': '5433',
         }
     }
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -171,6 +175,17 @@ else:
     }        
 CACHE_TTL = 60 * 5
 
+CELERY_BROKER_URL = "redis://redis:6379/1"
+
+CELERY_RESULT_BACKEND = "redis://redis:6379/1"
+
+CELERY_ACCEPT_CONTENT = ["json"]
+
+CELERY_TASK_SERIALIZER = "json"
+
+CELERY_RESULT_SERIALIZER = "json"
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -200,3 +215,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8000"]
+

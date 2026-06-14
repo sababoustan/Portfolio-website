@@ -15,23 +15,34 @@ services:
   web:
     build: .
     container_name: gexyshop_web
-    environment:
-      IS_DOCKER : "true"
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file:
+    - .env
     restart: unless-stopped
     command: python manage.py runserver 0.0.0.0:8000
     depends_on:
       - db
       - redis
-    env_file:
-      - .env
+    environment:
+      IS_DOCKER: "true"
     volumes:
       - .:/app
       - media_data:/app/media
     ports:
       - "8000:8000"
+
+  master:
+    image: locustio/locust
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://web:8000
+  
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
 
   redis:
     image: redis:7
@@ -39,6 +50,34 @@ services:
     restart: unless-stopped
     ports:
       - "6379:6379"
+
+  celery:
+    build: .
+    command: celery -A gexyshop worker -l info
+    env_file:
+    - .env
+    environment:
+      IS_DOCKER: "true"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
+
+
+  celery-beat:
+    build: . 
+    command: celery -A gexyshop beat -l info
+    env_file:
+    - .env
+    environment:
+      IS_DOCKER: "true"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/app
+    
 
 volumes:
   postgres_data:
