@@ -2,6 +2,7 @@ from rest_framework import serializers
 from cart.models import Cart, CartItem, Wishlist
 from products.models import Product 
 
+
 class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:

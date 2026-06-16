@@ -5,7 +5,7 @@ from cart.models import Cart
 
 @shared_task
 def clear_old_carts():
-    cart = Cart.objects.filter(
+    Cart.objects.filter(
         status__in=[Cart.Status.DRAFT, Cart.Status.Rejected],
         created_at__lt=timezone.now() - timedelta(days=30)
     ).delete()

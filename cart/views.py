@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.http import JsonResponse
-from django.shortcuts import redirect, get_object_or_404
 from .models import Cart, Wishlist, Product
 from .services import (AddToCartService,
                        UpdateCartItemService,
@@ -25,7 +24,7 @@ class CartMixin:
                     status=Cart.Status.DRAFT
                 )
 
-            return cart
+                return cart
 
         if not request.session.session_key:
             request.session.create()
@@ -137,10 +136,8 @@ class ApplyCouponView(CartMixin, View):
         return redirect("cart:cart_view")
 
 
-class WishlistListView(View):
-    def get(self, request):
-        items = Wishlist.objects.filter(user=request.user)
-        return render(request, "cart/shop-wishlist.html", {"items": items})
+def wishlist_page(request):
+    return render(request, 'cart/shop-wishlist.html')
 
 
 class WishlistToggleView(View):

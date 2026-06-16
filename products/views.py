@@ -1,5 +1,5 @@
 from .models import Product
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, TemplateView
 from django.db.models import Q
 from django.contrib import messages
