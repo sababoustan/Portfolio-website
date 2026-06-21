@@ -22,7 +22,12 @@ This project implements a simple online shop with features such as:
 - Product recommendation system
 - Redis caching
 - RESTful APIs
-- Dockerized deployment
+- Background tasks with Celery & Celery Beat
+- CI pipeline using GitHub Actions
+- Load testing with Locust
+- Dockerized deployment (multi-service)
+- Nginx + Gunicorn production setup
+- Unit Tested Business Logic- Dockerized deployment
 - Unit Tested Business Logic
 
 ---
@@ -39,6 +44,12 @@ This project implements a simple online shop with features such as:
 - Docker Compose
 - pytest / pytest-django
 - Zibal Payment Gateway
+- Celery
+- Celery Beat
+- GitHub Actions
+- Gunicorn
+- Nginx
+- Locust
 
 ---
 
@@ -46,6 +57,9 @@ This project implements a simple online shop with features such as:
 
 ```text
 project_django/
+├── .github/
+│   └── workflows/
+│       └── django-ci.yml
 ├── accounts/        # Authentication, user addresses
 │   ├── api/
 ├── cart/            # Shopping cart logic
@@ -65,16 +79,16 @@ project_django/
 ├── templates/       # HTML templates
 ├── .dockerignore
 ├── .gitignore
+├── default.conf
+├── docker-compose-stage.yaml
 ├── docker-compose.yml
 ├── Dockerfile
+├── locustfile.py
 ├── manage.py
 ├── pytest.ini
 ├── README.md
 └── requirements.txt
----
-
-
----
+```
 
 ## 🧠 Architecture
 
@@ -172,17 +186,41 @@ A recommendation engine suggests products based on:
 - Wishlist activity
 - Product categories
 
+## 🔄 Background Tasks
+
+Asynchronous tasks are handled using Celery and Redis:
+
+- Automatic cleanup of abandoned carts
+- Scheduled tasks with Celery Beat
+- Background processing without blocking HTTP requests
+
+## ⚙️ CI Pipeline
+
+Continuous Integration is implemented using GitHub Actions.
+
+Pipeline workflow:
+
+- Checkout source code
+- Setup Python environment
+- Start PostgreSQL & Redis services
+- Run migrations
+- Run tests with pytest
+
+Triggered on:
+- Push to main
+- Pull Requests targeting main
+
 ## 🐳 Docker Support
 
-The project is fully containerized using Docker and Docker Compose.
+The project is fully containerized using Docker and Docker Compose, including:
 
-Included services:
-
-- Django Application
-- PostgreSQL Database
-- Redis Cache
-
-Development environment can be started with a single command using Docker Compose.
+- Django + Gunicorn
+- PostgreSQL
+- Redis
+- Celery Worker
+- Celery Beat
+- Nginx
+- Locust (staging)
 
 ## 🏗 Engineering Concepts Demonstrated
 
@@ -196,6 +234,13 @@ Development environment can be started with a single command using Docker Compos
 - Permission-based Access Control
 - Docker Containerization
 - Performance Optimization
+- GitHub Actions CI
+- Celery Background Processing
+- Periodic Tasks with Celery Beat
+- Gunicorn Application Server
+- Nginx Reverse Proxy
+- Load Testing with Locust
+- Staging Environment Configuration
 
 ## 💳 Payment Flow
 
@@ -226,19 +271,64 @@ Tools:
 - pytest
 - pytest-django
 - mocking external HTTP requests
+- unittest.mock
+- GitHub Actions CI
+
+## 🚀 Production & Staging Deployment
+
+A staging environment is available using Docker Compose with:
+
+- Django + Gunicorn
+- PostgreSQL
+- Redis
+- Celery Worker
+- Celery Beat
+- Nginx
+- Locust (load testing)
+
+---
+
+### 🌐 Request Flow
+
+```text
+Client → Nginx → Gunicorn → Django → PostgreSQL
+```
 
 ## ⭐ Key Features
 
 - Service Layer Architecture
-- JWT Authentication
-- Redis Caching
-- Dockerized Environment
-- Payment Gateway Integration
-- Product Recommendation System
-- Coupon & Discount System
-- Wishlist Functionality
-- Unit Tested Business Logic
-- PostgreSQL Database
+- JWT Authentication (Access & Refresh Tokens)
+- Redis Caching Strategy
+- Dockerized Multi-service Environment
+- Celery Background Processing
+- GitHub Actions CI Pipeline
+- Distributed Load Testing with Locust
+
+## 📈 Load Testing
+
+Load testing is performed using Locust.
+
+Architecture:
+
+```text
+Locust Master
+      ↓
+Locust Workers
+      ↓
+Django Application
+```
+
+This allows distributed load testing and performance analysis under concurrent users.
+
+
+## 🌐 Deployment Stack
+
+```text
+Client → Nginx → Gunicorn → Django → PostgreSQL
+
+Redis → Celery Worker → Background Tasks
+       → Celery Beat (Scheduler)
+```
 
 ## ⚙️ Setup & Run
 
@@ -282,10 +372,15 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Run with Docker
+### Run with Docker (Development)
 
 ```bash
 docker-compose up --build
+```
+
+### 🚀 Run with Staging
+```bash
+docker-compose -f docker-compose-stage.yaml up --build
 ```
 
 ### Run Tests
