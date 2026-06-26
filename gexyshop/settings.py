@@ -12,10 +12,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -27,7 +30,7 @@ IS_DOCKER = os.getenv("IS_DOCKER", "false").lower() == "true"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 
-allowed_hosts = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
 # Application definition
 
@@ -97,7 +100,6 @@ SIMPLE_JWT = {
 
 WSGI_APPLICATION = 'gexyshop.wsgi.application'
 AUTH_USER_MODEL = 'accounts.User'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
